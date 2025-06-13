@@ -3,62 +3,59 @@
 #include <utility>
 #include <vector>
 
-using Edge = std::pair<int64_t, int64_t>;
-using Graph = std::vector<std::vector<Edge>>;
+using edge_t = std::pair<size_t, size_t>;
+using graph_t = std::vector<std::vector<edge_t>>;
 
-std::vector<int64_t> x_values;
-long long total_min_energy = 0LL;
-
-long long dfs(int64_t u, int64_t parent, const Graph& graph) {
-    long long current_subtree_charge = x_values[u];
-
-    for (const auto& edge : graph[u]) {
-        int64_t v = edge.first;
-        int64_t weight = edge.second;
-
-        if (v == parent) {
-            continue;
-        }
-
-        long long child_subtree_charge = dfs(v, u, graph);
-
-        current_subtree_charge += child_subtree_charge;
-
-        total_min_energy += std::abs(child_subtree_charge) * weight;
-    }
-
-    return current_subtree_charge;
-}
-
-int main() {
+int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    int64_t n;
+    size_t n = 0UL, u = 0UL, v = 0UL, w = 0UL;
     std::cin >> n;
 
-    x_values.resize(n);
-    for (int64_t i = 0; i < n; ++i) {
-        std::cin >> x_values[i];
+    std::vector<int64_t> x(n);
+    graph_t graph(n);
+
+    for (size_t i = 0; i < n; ++i) {
+        std::cin >> x[i];
     }
 
-    Graph graph(n);
-
-    for (int64_t i = 0; i < n - 1; ++i) {
-        int64_t u_in, v_in, w_in;
-        std::cin >> u_in >> v_in >> w_in;
-
-        int64_t u_0_indexed = u_in - 1;
-        int64_t v_0_indexed = v_in - 1;
-
-        graph[u_0_indexed].emplace_back(v_0_indexed, w_in);
-        graph[v_0_indexed].emplace_back(u_0_indexed, w_in);
+    for (size_t i = 0; i < n - 1; ++i) {
+        std::cin >> u >> v >> w;
+        // compensation for 1-based indexing
+        --u;
+        --v;
+        // bidirectional graph
+        graph[u].emplace_back(edge_t(v, w));
+        graph[v].emplace_back(edge_t(u, w));
     }
 
-    dfs(0, -1, graph);
+    // so this is simply a sum of all node * edgeweight problem instead of minimizing
+    // because if an node contains |x| charge, no matter what we do, we will have to move it along
+    // the edge. so effective cost will be sum of |xj|* wj for every node in the tree
+    // this can be done using a dfs instead of a bfs because it makes sense to do it in dfs fashion
 
-    std::cout << total_min_energy << std::endl;
+    size_t min_cost = 0UL;
+
+    auto dfs = [&](auto& dfs, size_t u, size_t parent) -> void {
+        // for each neighbour for this node we will perform dfs and calculate required cost
+        for (auto& [v, w] : graph[u]) {
+            // avoids loops while traversing the tree
+            if (v == parent) {
+                continue;
+            }
+            dfs(dfs, v, u);
+            min_cost += w * std::abs(x[v]);
+            // sum up the particles for this subtree since we annihilated them by bringing
+            // them together to this edge
+            x[u] += x[v];
+        }
+    };
+
+    dfs(dfs, 0, -1);
+
+    std::cout << min_cost << std::endl;
 
     return 0;
 }

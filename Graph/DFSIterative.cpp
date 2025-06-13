@@ -13,12 +13,12 @@ void dfs(graph_t& graph, size_t num_vertices, size_t start_node) {
     // visited vector for avoiding loops
     std::vector<bool> visited(num_vertices, 0);
 
+    // mark this initial node as visited
+    visited[start_node] = true;
+
     // initialize stack
     std::stack<size_t> dfs_stack;
     dfs_stack.push(start_node);
-
-    // mark this initial node as visited
-    visited[start_node] = true;
 
     // if there is nothing in the stack, it means we have explored the graph
     while (!dfs_stack.empty()) {

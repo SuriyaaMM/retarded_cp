@@ -16,6 +16,7 @@ int main(int, char**) {
     bool found = false;
 
     for (size_t i = 0; i < n; ++i) {
+        // if they both need this item then return yes and break
         if (t[i] == 'o' && s[i] == 'o') {
             std::cout << "Yes" << std::endl;
             found = true;
@@ -23,6 +24,7 @@ int main(int, char**) {
         }
     }
 
+    // if that common item is not found then print no
     if (!found) {
         std::cout << "No" << std::endl;
     }
