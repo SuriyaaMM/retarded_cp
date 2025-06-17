@@ -149,10 +149,13 @@ void solve() {
     // base case: 0 monsters defeated, 0 magic used, full health
     dp[0][0] = h;
 
+    // for defeating each monster starting from 1
     for (size_t i = 0; i < n; ++i) {
+        // we will iterate through all possible magic usages
         for (size_t j = 0; j <= m; ++j) {
+            // if we haven't at all reached this state before,
             if (dp[i][j] == -1)
-                continue;  // This state is impossible
+                continue;
 
             int current_health = dp[i][j];
             int health_cost = q[i].first;
