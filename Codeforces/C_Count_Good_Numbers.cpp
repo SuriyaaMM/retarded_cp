@@ -78,14 +78,52 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+const std::vector<int64_t> bad_primes = {2, 3, 5, 7};
+int64_t count_good_up_to(int64_t x) {
+    if (x == 0) {
+        return 0;
+    }
 
-int main(int, char**) {
+    int64_t bad_count = 0;
+    const int n = bad_primes.size();
+
+    for (int64_t i = 1; i < (1 << n); ++i) {
+        int64_t product = 1;
+        int64_t subset_size = 0;
+
+        for (int64_t j = 0; j < n; ++j) {
+            if ((i >> j) & 1) {
+                product *= bad_primes[j];
+                subset_size++;
+            }
+        }
+
+        if (subset_size % 2 == 1) {
+            bad_count += x / product;
+        } else {
+            bad_count -= x / product;
+        }
+    }
+
+    return x - bad_count;
+}
+
+void solve() {
+    int64_t l, r;
+    std::cin >> l >> r;
+    std::cout << count_good_up_to(r) - count_good_up_to(l - 1) << "\n";
+}
+
+int main() {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t tt;
+    std::cin >> tt;
+    while (tt--) {
+        solve();
+    }
 
     return 0;
 }

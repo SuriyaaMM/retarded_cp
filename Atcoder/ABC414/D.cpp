@@ -1,7 +1,10 @@
 #include <algorithm>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <limits>
+#include <numeric>
+#include <ostream>
 #include <queue>
 #include <set>
 #include <string>
@@ -14,11 +17,6 @@
 #define read_vec(begin, end, vec)         \
     for (int64_t i = begin; i < end; ++i) \
         std::cin >> vec[i];
-
-// reads the vector pair
-#define read_vecp(begin, end, vec)        \
-    for (int64_t i = begin; i < end; ++i) \
-        std::cin >> vec[i].first >> vec[i].second;
 
 // prints the vector
 #define print_vec(begin, end, vec)        \
@@ -40,45 +38,29 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-// disjoint set union by  & path compression
-struct dsur_t {
+void solve() {
 
-    std::vector<int64_t> parent, rank;
+    int64_t n = 0LL, m = 0LL;
+    std::cin >> n >> m;
 
-    dsur_t(int64_t n) {
-        // O(n)
-        parent.resize(n + 1);
-        // O(n)
-        rank.resize(n + 1, 0);
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
 
-        for (int64_t i = 1; i <= n; ++i) {
-            parent[i] = i;
-        }
-    }
-    // O(1)
-    int64_t find_parent(int64_t x) {
-        if (parent[x] != x)
-            parent[x] = find_parent(parent[x]);
-        return parent[x];
+    std::sort(a.begin(), a.end());
+    std::vector<int64_t> d(n, 0);
+
+    for (int64_t i = 0; i < n - 1; ++i) {
+        d[i] = a[i + 1] - a[i];
     }
 
-    void unite(int64_t u, int64_t v) {
-        u = find_parent(u);
-        v = find_parent(v);
-
-        if (v == u)
-            return;
-
-        if (rank[u] < rank[v])
-            std::swap(u, v);
-
-        parent[v] = u;
-        if (rank[u] == rank[v])
-            ++rank[u];
+    std::sort(d.begin(), d.end(), std::greater<>());
+    int64_t sum = a[n - 1] - a[0];
+    for (int64_t i = 0; i < m - 1; ++i) {
+        sum -= d[i];
     }
-};
 
-void solve() {}
+    std::cout << sum << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

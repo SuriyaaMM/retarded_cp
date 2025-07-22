@@ -40,6 +40,19 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
+#include <ext/pb_ds/assoc_container.hpp>
+#include <ext/pb_ds/hash_policy.hpp>
+
+struct pair_hash {
+    int64_t operator()(const pair_t& p) const {
+        return std::hash<int64_t>()(p.first) ^
+               (std::hash<int64_t>()(p.second) << 1);
+    }
+};
+
+using namespace __gnu_pbds;
+using fset = gp_hash_table<pair_t, null_type, pair_hash>;
+
 // disjoint set union by  & path compression
 struct dsur_t {
 
@@ -78,7 +91,54 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL, m = 0LL, u = 0LL, v = 0LL, k = 0LL, u_component = 0LL,
+            v_component = 0LL, q = 0LL;
+    std::cin >> n >> m;
+
+    dsur_t dsu(n);
+    // connect all base edges
+    for (int64_t i = 0; i < m; ++i) {
+        std::cin >> u >> v;
+        dsu.unite(u, v);
+    }
+
+    // forbidden components
+    std::cin >> k;
+    fset forbidden_pairs;
+    for (int64_t i = 0; i < k; ++i) {
+        std::cin >> u >> v;
+        u_component = dsu.find_parent(u);
+        v_component = dsu.find_parent(v);
+
+        if (u_component == v_component)
+            continue;
+        if (u_component > v_component)
+            std::swap(u_component, v_component);
+
+        forbidden_pairs.insert(std::make_pair(u_component, v_component));
+    }
+
+    // answer queries
+    std::cin >> q;
+    for (int64_t i = 0; i < q; ++i) {
+        std::cin >> u >> v;
+        u_component = dsu.find_parent(u);
+        v_component = dsu.find_parent(v);
+
+        if (v_component == u_component) {
+            std::cout << "Yes\n";
+            continue;
+        }
+        if (u_component > v_component)
+            std::swap(u_component, v_component);
+        if (forbidden_pairs.find(std::make_pair(u_component, v_component)) !=
+            forbidden_pairs.end())
+            std::cout << "No\n";
+        else
+            std::cout << "Yes\n";
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

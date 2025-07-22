@@ -1,8 +1,10 @@
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <queue>
+#include <ranges>
 #include <set>
 #include <string>
 #include <unordered_map>
@@ -78,14 +80,40 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, start = 0L;
+    std::cin >> n >> start;
+    std::vector<int64_t> h(n, 0);
+    read_vec(0, n, h);
+
+    int64_t start_value = h[start - 1];
+    std::sort(h.begin(), h.end());
+    auto it = std::lower_bound(h.begin(), h.end(), start_value);
+    int64_t start_index = std::distance(h.begin(), it);
+
+    int64_t time = 0L, current = start_value;
+    for (int64_t i = start_index; i < n; ++i) {
+        time += h[i] - current;
+        if (time >= current) {
+            std::cout << "NO\n";
+            return;
+        }
+        current = h[i];
+    }
+
+    std::cout << "YES\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t tt = 0L;
+    std::cin >> tt;
+    while (tt--) {
+        solve();
+    }
 
     return 0;
 }

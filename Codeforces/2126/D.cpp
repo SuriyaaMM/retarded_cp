@@ -5,6 +5,7 @@
 #include <queue>
 #include <set>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -78,14 +79,65 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL, k = 0LL;
+    std::cin >> n >> k;
+
+    using state_t = std::tuple<int64_t, int64_t, int64_t>;
+    int64_t l = 0LL, r = 0LL, real = 0LL;
+    std::vector<state_t> casinos(n, {0, 0, 0});
+
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> l >> r >> real;
+        casinos[i] = std::make_tuple(l, r, real);
+    }
+
+    std::ranges::sort(casinos);
+    std::priority_queue<pair_t> available_casinos;
+
+    int64_t current_coins = k;
+    int64_t max_coins = k;
+    int64_t casino_idx = 0;
+
+    while (casino_idx < n || !available_casinos.empty()) {
+        // playable to pq
+        while (casino_idx < n &&
+               std::get<0>(casinos[casino_idx]) <= current_coins) {
+            auto& casino = casinos[casino_idx];
+            available_casinos.push({std::get<2>(casino), std::get<1>(casino)});
+            casino_idx++;
+        }
+
+        while (!available_casinos.empty() &&
+               available_casinos.top().second < current_coins) {
+            available_casinos.pop();
+        }
+
+        if (available_casinos.empty()) {
+            break;
+        } else {
+            // greedy
+            pair_t best_game = available_casinos.top();
+            available_casinos.pop();
+
+            current_coins = best_game.first;
+            max_coins = std::max(max_coins, current_coins);
+        }
+    }
+
+    std::cout << max_coins << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t t = 0LL;
+    std::cin >> t;
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }

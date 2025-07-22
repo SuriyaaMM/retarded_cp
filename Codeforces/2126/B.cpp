@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
+#include <numeric>
 #include <queue>
 #include <set>
 #include <string>
@@ -78,14 +79,45 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int n, k;
+    std::cin >> n >> k;
+    std::vector<int> a(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> a[i];
+    }
+
+    std::vector<int> prefix_ones(n + 1, 0);
+    for (int i = 0; i < n; ++i) {
+        prefix_ones[i + 1] = prefix_ones[i] + a[i];
+    }
+
+    std::vector<int> dp(n + 3, 0);
+
+    for (int i = n; i >= 1; --i) {
+        dp[i] = dp[i + 1];
+
+        if (i + k - 1 <= n) {
+            int ones_in_window = prefix_ones[i + k - 1] - prefix_ones[i - 1];
+            if (ones_in_window == 0) {
+                dp[i] = std::max(dp[i], 1 + dp[i + k + 1]);
+            }
+        }
+    }
+
+    std::cout << dp[1] << "\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int t;
+    std::cin >> t;
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }

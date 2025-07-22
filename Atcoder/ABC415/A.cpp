@@ -78,7 +78,22 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL, ai = 0LL, x = 0LL;
+    std::cin >> n;
+
+    std::unordered_set<int64_t> a;
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> ai;
+        a.emplace(ai);
+    }
+    std::cin >> x;
+    if (a.find(x) != a.end()) {
+        std::cout << "Yes" << std::endl;
+    } else {
+        std::cout << "No" << std::endl;
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

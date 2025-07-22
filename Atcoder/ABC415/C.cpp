@@ -78,14 +78,73 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+bool dfs(const std::string& s, int& pos) {
+    // post order traversal
+    if (pos >= s.size()) {
+        return true;
+    }
+
+    bool left = dfs(s, pos);
+    bool right = dfs(s, pos);
+
+    bool ok = (s[pos] == '1') && left && right;
+    ++pos;
+    return ok;
+}
+
+void solve() {
+    int n;
+    std::cin >> n;
+    std::string s;
+    std::cin >> s;
+
+    // dp[mask] is true if the state `mask` is safely reachable.
+    std::vector<bool> dp(1 << n, false);
+
+    // Base case: The empty bottle (state 0) is always reachable.
+    dp[0] = true;
+
+    // Iterate through all possible non-empty states.
+    for (int mask = 1; mask < (1 << n); ++mask) {
+        // If the current state is dangerous, we can't form it.
+        // S is 0-indexed for states 1 to 2^N-1.
+        if (s[mask - 1] == '1') {
+            continue;
+        }
+
+        // Check if this state is reachable from a smaller safe state.
+        for (int i = 0; i < n; ++i) {
+            // Check if chemical `i` is part of the current mixture `mask`.
+            if ((mask >> i) & 1) {
+                // `prev_mask` is the state before adding chemical `i`.
+                int prev_mask = mask ^ (1 << i);
+
+                // If the previous state was reachable, then this one is too.
+                if (dp[prev_mask]) {
+                    dp[mask] = true;
+                    // We found one valid path, no need to check others for this mask.
+                    break;
+                }
+            }
+        }
+    }
+
+    // The final answer is whether the state with all chemicals is reachable.
+    std::cout << (dp[(1 << n) - 1] ? "Yes" : "No") << '\n';
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t t = 0LL;
+    std::cin >> t;
+
+    while (t--) {
+
+        solve();
+    }
 
     return 0;
 }

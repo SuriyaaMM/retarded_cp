@@ -15,11 +15,6 @@
     for (int64_t i = begin; i < end; ++i) \
         std::cin >> vec[i];
 
-// reads the vector pair
-#define read_vecp(begin, end, vec)        \
-    for (int64_t i = begin; i < end; ++i) \
-        std::cin >> vec[i].first >> vec[i].second;
-
 // prints the vector
 #define print_vec(begin, end, vec)        \
     for (int64_t i = begin; i < end; ++i) \
@@ -40,45 +35,16 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-// disjoint set union by  & path compression
-struct dsur_t {
+void solve() {
+    int64_t a = 0LL, b = 0LL;
+    std::cin >> a >> b;
 
-    std::vector<int64_t> parent, rank;
-
-    dsur_t(int64_t n) {
-        // O(n)
-        parent.resize(n + 1);
-        // O(n)
-        rank.resize(n + 1, 0);
-
-        for (int64_t i = 1; i <= n; ++i) {
-            parent[i] = i;
-        }
+    if (a % b == 0) {
+        std::cout << static_cast<int64_t>(a / b) << std::endl;
+    } else {
+        std::cout << static_cast<int64_t>(a / b) + 1LL << std::endl;
     }
-    // O(1)
-    int64_t find_parent(int64_t x) {
-        if (parent[x] != x)
-            parent[x] = find_parent(parent[x]);
-        return parent[x];
-    }
-
-    void unite(int64_t u, int64_t v) {
-        u = find_parent(u);
-        v = find_parent(v);
-
-        if (v == u)
-            return;
-
-        if (rank[u] < rank[v])
-            std::swap(u, v);
-
-        parent[v] = u;
-        if (rank[u] == rank[v])
-            ++rank[u];
-    }
-};
-
-void solve() {}
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

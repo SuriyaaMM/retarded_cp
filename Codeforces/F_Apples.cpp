@@ -78,7 +78,83 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+8 4 3
+1 1 
+3 4
+6 4
+5 2
+4 2
+4 3
+5 5
+7 3
+
+first we will sort
+1 1 
+4 2
+5 2
+4 3
+7 3
+3 4
+6 4
+5 5
+
+what we can choose? s & l
+what is already given? d & w
+what is our goal?
+maximimize number of apples that are falling in the range 
+    [l-0.5, l+2.5] in the time [s-0.5, s+3.5]
+    l+2.5 - (l-0.5) = 3 is the maximum window size
+    s+3.5 - (s-0.5) = 4 is the maximum time window
+
+    say s = 1, we can start at 0.5 and 4.5
+        within this time window
+        1 apple from 1
+        2 apples from 4
+        1 apple from 5
+        1 from 6
+        1 from 7
+    
+
+*/
+void solve() {
+
+    int64_t n = 0L, d = 0L, w = 0L, ti = 0L, xi = 0L;
+    std::cin >> n >> d >> w;
+
+    std::vector<pair_t> a(n, {0, 0});
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> xi >> ti;
+        a[i] = {ti, xi};
+    }
+
+    std::sort(a.begin(), a.end());
+
+    int64_t max_apples = 0;
+    int64_t left = 0;
+
+    std::multiset<int64_t> active_xs;
+
+    for (int64_t right = 0; right < n; ++right) {
+
+        active_xs.insert(a[right].second);
+
+        while (a[right].first - a[left].first >= d) {
+            active_xs.erase(active_xs.find(a[left].second));
+            ++left;
+        }
+
+        std::vector<int64_t> xs(active_xs.begin(), active_xs.end());
+        int64_t l = 0;
+        for (int64_t r = 0; r < xs.size(); ++r) {
+            while (xs[r] - xs[l] >= w)
+                ++l;
+            max_apples = std::max(max_apples, r - l + 1);
+        }
+    }
+
+    std::cout << max_apples << '\n';
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

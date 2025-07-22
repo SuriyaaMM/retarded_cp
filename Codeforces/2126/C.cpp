@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <cstdint>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <queue>
 #include <set>
@@ -78,14 +79,58 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+
+    int64_t n = 0LL, k = 0LL;
+    std::cin >> n >> k;
+    --k;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    int64_t start = a[k], start_index = 0LL;
+
+    std::sort(a.begin(), a.end());
+
+    auto start_iterator = std::ranges::find(a, start);
+    start_index = std::ranges::distance(a.begin(), start_iterator);
+
+    int64_t maximum_jumpable_level = 0LL, current_level = start_index,
+            water_level = 0LL;
+    while (current_level < n) {
+        maximum_jumpable_level = a[current_level] - water_level;
+
+        auto next_valid_itp1 = std::upper_bound(
+            start_iterator, a.end(), a[maximum_jumpable_level + start_index]);
+
+        int64_t next_jumpable_level =
+            std::ranges::distance(start_iterator, next_valid_itp1);
+        --next_jumpable_level;
+        if (next_jumpable_level == current_level) {
+            std::cout << "No\n";
+            return;
+        }
+        if (next_jumpable_level == n - 1) {
+            std::cout << "Yes\n";
+            return;
+        }
+
+        water_level += (next_jumpable_level - current_level);
+        current_level = next_jumpable_level;
+    }
+
+    std::cout << "Yes\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-
-    solve();
+    int64_t t = 0LL;
+    std::cin >> t;
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }

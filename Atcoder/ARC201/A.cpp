@@ -5,6 +5,7 @@
 #include <queue>
 #include <set>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -78,14 +79,43 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+std::vector<int64_t> minimum_number_of_div1s(2e5, 0),
+    maximum_number_of_div1s(2e5, 0), a(2e5, 0), b(2e5, 0), c(2e5, 0);
+
+void solve() {
+
+    using state_t = std::tuple<int64_t, int64_t, int64_t>;
+    int64_t n = 0LL;
+    std::cin >> n;
+
+    int64_t minimum_number_of_div1_net = 0LL, maximum_number_of_div1_net = 0LL,
+            mediums = 0LL;
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> a[i] >> b[i] >> c[i];
+        b[i] = std::min(b[i], a[i] + c[i]);
+        mediums += b[i];
+        minimum_number_of_div1s[i] = std::max((int64_t)(0), b[i] - c[i]);
+        maximum_number_of_div1s[i] = std::min(a[i], b[i]);
+        minimum_number_of_div1_net += minimum_number_of_div1s[i];
+        maximum_number_of_div1_net += maximum_number_of_div1s[i];
+    }
+
+    std::cout << std::min(mediums / 2,
+                          std::min(maximum_number_of_div1_net,
+                                   mediums - minimum_number_of_div1_net))
+              << "\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t t = 0LL;
+    std::cin >> t;
 
+    while (t--) {
+        solve();
+    }
     return 0;
 }

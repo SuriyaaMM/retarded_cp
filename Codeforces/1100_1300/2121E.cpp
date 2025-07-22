@@ -78,14 +78,29 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t l = 0LL, r = 0LL;
+    std::cin >> l >> r;
+
+    std::string l_string = std::to_string(l), r_string = std::to_string(r);
+
+    int64_t answer = 0LL;
+    for (int64_t i = 0, j = 0; i < l_string.size() && j < r_string.size();
+         ++i, ++j) {}
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t t = 0LL;
+    std::cin >> t;
+
+    while (t--) {
+
+        solve();
+    }
 
     return 0;
 }

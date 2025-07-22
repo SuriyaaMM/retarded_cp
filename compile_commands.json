@@ -1,0 +1,7 @@
+[
+{
+  "directory": "/home/mms/dev/retarded_cp",
+  "command": "g++   -O2 -Wall -Wextra -std=gnu++23 -o CMakeFiles/Atcoder.dir/Atcoder/ABC415/D.cpp.o -c /home/mms/dev/retarded_cp/Atcoder/ABC415/D.cpp",
+  "file": "/home/mms/dev/retarded_cp/Atcoder/ABC415/D.cpp"
+}
+]

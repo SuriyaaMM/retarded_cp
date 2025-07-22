@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 #include <limits>
 #include <queue>
@@ -78,14 +79,42 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    std::string s;
+    std::cin >> s;
+
+    if (s.find("FFT") == std::string::npos &&
+        s.find("NTT") == std::string::npos) {
+        std::cout << s << "\n";
+        return;
+    }
+
+    std::string t_part = "", f_part = "", n_part = "", rest = "";
+
+    for (char c : s) {
+        if (c == 'T')
+            t_part += c;
+        else if (c == 'F')
+            f_part += c;
+        else if (c == 'N')
+            n_part += c;
+        else
+            rest += c;
+    }
+
+    std::cout << t_part + f_part + n_part + rest << "\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t tt = 0L;
+    std::cin >> tt;
+    while (tt--) {
+        solve();
+    }
 
     return 0;
 }

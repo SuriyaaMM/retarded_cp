@@ -78,7 +78,16 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int t;
+    std::cin >> t;
+    while (t--) {
+        int x;
+        std::cin >> x;
+        std::string s = std::to_string(x);
+        std::cout << *std::min_element(s.begin(), s.end()) << "\n";
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

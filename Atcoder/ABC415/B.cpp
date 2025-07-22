@@ -78,7 +78,23 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    std::string s = "";
+    std::cin >> s;
+
+    int64_t times_done = 0LL, index_1 = 0LL;
+    for (int64_t i = 0; i < s.size(); ++i) {
+        if (s[i] == '#') {
+            ++times_done;
+            if (times_done == 2) {
+                std::cout << index_1 << "," << (i + 1) << std::endl;
+                times_done = 0;
+            } else {
+                index_1 = i + 1;
+            }
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

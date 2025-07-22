@@ -1,6 +1,13 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(Atcoder VERSION 0.1.0 LANGUAGES C CXX)
 
-add_executable(Atcoder Codeforces/2124/D.cpp)
+set(CMAKE_C_COMPILER "gcc")
+set(CMAKE_CXX_COMPILER "g++")
 
-target_compile_features(Atcoder PUBLIC cxx_std_23)
+add_executable(Atcoder A_Difficult_Contest.cpp)
+
+# Use C++23
+target_compile_features(Atcoder PUBLIC cxx_std_20)
+
+# Optimization flags (for speed)
+target_compile_options(Atcoder PRIVATE -O2 -Wall -Wextra)

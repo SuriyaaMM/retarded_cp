@@ -78,14 +78,54 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL, m = 0LL;
+    std::cin >> n >> m;
+
+    std::vector<std::vector<int64_t>> grid(n, std::vector<int64_t>(m, 0));
+    std::priority_queue<pair_t> row_heap, column_heap;
+
+    int64_t global_sum = 0LL;
+
+    for (int64_t i = 0; i < n; ++i) {
+        int64_t row_sum = 0LL;
+        for (int64_t j = 0; j < m; ++j) {
+            std::cin >> grid[i][j];
+            row_sum += grid[i][j];
+            global_sum += grid[i][j];
+        }
+        row_heap.push(std::make_pair(row_sum, i));
+    }
+
+    for (int64_t j = 0; j < m; ++j) {
+        int64_t column_sum = 0LL;
+        for (int64_t i = 0; i < n; ++i) {
+            column_sum += grid[i][j];
+        }
+        column_heap.push(std::make_pair(column_sum, j));
+    }
+
+    const auto [row_sum, row] = row_heap.top();
+    const auto [column_sum, column] = column_heap.top();
+
+    int64_t answer = global_sum + grid[row][column] - n - m;
+    std::cout << answer << std::endl;
+
+    //O(2*n*m) + O(nlogn + mlogm)
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t t = 0LL;
+    std::cin >> t;
+
+    while (t--) {
+
+        solve();
+    }
 
     return 0;
 }

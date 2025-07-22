@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <limits>
 #include <queue>
@@ -14,11 +15,6 @@
 #define read_vec(begin, end, vec)         \
     for (int64_t i = begin; i < end; ++i) \
         std::cin >> vec[i];
-
-// reads the vector pair
-#define read_vecp(begin, end, vec)        \
-    for (int64_t i = begin; i < end; ++i) \
-        std::cin >> vec[i].first >> vec[i].second;
 
 // prints the vector
 #define print_vec(begin, end, vec)        \
@@ -40,45 +36,40 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-// disjoint set union by  & path compression
-struct dsur_t {
+void solve() {
+    int64_t n = 0LL, m = 0LL, d = 0LL;
+    std::cin >> n >> m >> d;
 
-    std::vector<int64_t> parent, rank;
+    std::vector<int64_t> a(n, 0), b(m, 0);
+    read_vec(0, n, a);
+    read_vec(0, m, b);
 
-    dsur_t(int64_t n) {
-        // O(n)
-        parent.resize(n + 1);
-        // O(n)
-        rank.resize(n + 1, 0);
+    std::sort(a.begin(), a.end());
+    std::sort(b.begin(), b.end());
 
-        for (int64_t i = 1; i <= n; ++i) {
-            parent[i] = i;
-        }
-    }
-    // O(1)
-    int64_t find_parent(int64_t x) {
-        if (parent[x] != x)
-            parent[x] = find_parent(parent[x]);
-        return parent[x];
-    }
+    int64_t max_sum = ninf;
 
-    void unite(int64_t u, int64_t v) {
-        u = find_parent(u);
-        v = find_parent(v);
+    int64_t pa = n - 1, pb = m - 1, diff = 0LL;
+    while (pa >= 0 && pb >= 0) {
+        diff = std::abs(a[pa] - b[pb]);
 
-        if (v == u)
+        if (diff <= d) {
+            std::cout << a[pa] + b[pb] << std::endl;
             return;
+        }
 
-        if (rank[u] < rank[v])
-            std::swap(u, v);
-
-        parent[v] = u;
-        if (rank[u] == rank[v])
-            ++rank[u];
+        if (a[pa] > b[pb])
+            --pa;
+        else
+            --pb;
     }
-};
 
-void solve() {}
+    if (max_sum != ninf) {
+        std::cout << max_sum << std::endl;
+    } else {
+        std::cout << -1 << std::endl;
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

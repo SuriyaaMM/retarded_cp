@@ -78,14 +78,80 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+//
+int64_t gcd(int64_t a, int64_t b) {
+    while (b) {
+        a %= b;
+        std::swap(a, b);
+    }
+    return a;
+}
+
+void solve() {
+    int n;
+    std::cin >> n;
+    std::vector<int64_t> p(n), s(n);
+    read_vec(0, n, p);
+    read_vec(0, n, s);
+
+    if (n == 1) {
+        std::cout << (p[0] == s[0] ? "Yes\n" : "No\n");
+        return;
+    }
+
+    bool possible = true;
+
+    if (p.back() != s.front()) {
+        possible = false;
+    }
+
+    for (int64_t i = 1; i < n && possible; ++i) {
+        if (p[i - 1] % p[i] != 0) {
+            possible = false;
+        }
+    }
+
+    for (int64_t i = 0; i < n - 1 && possible; ++i) {
+        if (s[i + 1] % s[i] != 0) {
+            possible = false;
+        }
+    }
+
+    if (!possible) {
+        std::cout << "No\n";
+        return;
+    }
+    // boundary checks
+    if (s[0] != gcd(p[0], s[1])) {
+        possible = false;
+    }
+    if (p[n - 1] != gcd(p[n - 2], s[n - 1])) {
+        possible = false;
+    }
+    // intermediate checks
+    for (int64_t i = 1; i < n - 1 && possible; ++i) {
+        int64_t common_gcd = gcd(p[i], s[i]);
+        if (gcd(p[i - 1] / p[i], s[i] / common_gcd) != 1) {
+            possible = false;
+        }
+        if (gcd(p[i] / common_gcd, s[i + 1] / s[i]) != 1) {
+            possible = false;
+        }
+    }
+
+    std::cout << (possible ? "Yes\n" : "No\n");
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int t;
+    std::cin >> t;
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }

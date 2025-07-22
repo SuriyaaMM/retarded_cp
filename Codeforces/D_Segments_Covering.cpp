@@ -78,7 +78,69 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+// mod exp
+int64_t power(int64_t base, int64_t exp) {
+    int64_t res = 1;
+    int64_t MOD = 998244353;
+    base %= MOD;
+    while (exp > 0) {
+        if (exp % 2 == 1)
+            res = (res * base) % MOD;
+        base = (base * base) % MOD;
+        exp /= 2;
+    }
+    return res;
+}
+
+// mod inv
+int64_t mod_inverse(int64_t n) {
+    int64_t MOD = 998244353;
+    return power(n, MOD - 2);
+}
+
+void solve() {
+    int64_t n, m;
+    std::cin >> n >> m;
+
+    int64_t MOD = 998244353;
+
+    std::vector<std::vector<gpair_t<int64_t, int64_t>>> ends_at(m + 1);
+    int64_t total_u_prod = 1;
+
+    for (int64_t i = 0; i < n; ++i) {
+        int64_t l, r, p, q;
+        std::cin >> l >> r >> p >> q;
+
+        int64_t inv_q = mod_inverse(q);
+        int64_t prob = (p * inv_q) % MOD;
+
+        // 1-p
+        int64_t u = (1 - prob + MOD) % MOD;
+
+        // p/(1-p)
+        int64_t inv_u = mod_inverse(u);
+        int64_t v = (prob * inv_u) % MOD;
+
+        ends_at[r].push_back({l, v});
+        total_u_prod = (total_u_prod * u) % MOD;
+    }
+
+    std::vector<int64_t> dp(m + 1, 0);
+    dp[0] = 1;
+
+    for (int64_t i = 1; i <= m; ++i) {
+        int64_t current_dp = 0;
+        for (const auto& seg : ends_at[i]) {
+            int64_t l = seg.first;
+            int64_t v = seg.second;
+            current_dp = (current_dp + (dp[l - 1] * v)) % MOD;
+        }
+        dp[i] = current_dp;
+    }
+
+    int64_t final_prob = (dp[m] * total_u_prod) % MOD;
+    std::cout << final_prob << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

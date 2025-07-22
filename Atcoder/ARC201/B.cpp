@@ -1,5 +1,6 @@
 #include <algorithm>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <limits>
 #include <queue>
@@ -78,14 +79,50 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL, w = 0LL;
+    std::cin >> n >> w;
+    std::vector<pair_t> a(n, {0, 0}), ar(n, {0, 0});
+
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> a[i].first >> a[i].second;
+        a[i].first = 1LL << a[i].first;
+        ar[i] = {a[i].second, a[i].first};
+    }
+
+    std::ranges::sort(a);
+    std::ranges::sort(ar, std::greater<>());
+
+    int64_t search_index = 0LL, current_sum = 0LL, current_value = 0LL,
+            max_value = 0LL;
+
+    for (int64_t i = 0; i < n; ++i) {
+        // immediatly we can return if this sum is > w
+        if (ar[i].second > w) {
+            continue;
+        }
+        // we will binary search in the possible space
+        search_index = i;
+        while (search_index < n) {
+            current_sum += ar[search_index].second;
+            std::ranges::lower_bound(ar,
+                                     [](const auto& first, const auto& second) {
+
+                                     })
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int64_t t = 0LL;
+    std::cin >> t;
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }

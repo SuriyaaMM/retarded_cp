@@ -2,6 +2,7 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
+#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -40,45 +41,52 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-// disjoint set union by  & path compression
-struct dsur_t {
+void solve() {
 
-    std::vector<int64_t> parent, rank;
+    int64_t w = 0LL, h = 0LL, n = 0LL, a = 0LL, b = 0LL;
+    std::cin >> w >> h >> n;
 
-    dsur_t(int64_t n) {
-        // O(n)
-        parent.resize(n + 1);
-        // O(n)
-        rank.resize(n + 1, 0);
+    std::vector<pair_t> strawberries(n, {0, 0});
+    read_vecp(0, n, strawberries);
 
-        for (int64_t i = 1; i <= n; ++i) {
-            parent[i] = i;
-        }
+    std::cin >> a;
+    std::vector<int64_t> acuts(a + 2, 0);
+    read_vec(1, a + 1, acuts);
+    acuts[a + 1] = w;
+
+    std::ranges::sort(acuts);
+
+    std::cin >> b;
+    std::vector<int64_t> bcuts(b + 2, 0);
+    read_vec(1, b + 1, bcuts);
+    bcuts[b + 1] = h;
+
+    std::ranges::sort(bcuts);
+
+    std::map<pair_t, int64_t> cake_map;
+
+    for (const auto& [sx, sy] : strawberries) {
+
+        int64_t x_interval_index =
+            std::ranges::lower_bound(acuts, sx) - acuts.begin() - 1;
+        int64_t y_interval_index =
+            std::ranges::lower_bound(bcuts, sy) - bcuts.begin() - 1;
+
+        ++cake_map[std::make_pair(x_interval_index, y_interval_index)];
     }
-    // O(1)
-    int64_t find_parent(int64_t x) {
-        if (parent[x] != x)
-            parent[x] = find_parent(parent[x]);
-        return parent[x];
+
+    int64_t min_berries = inf, max_berries = 0;
+    for (const auto& [grid, berries] : cake_map) {
+        min_berries = std::min(min_berries, berries);
+        max_berries = std::max(max_berries, berries);
     }
 
-    void unite(int64_t u, int64_t v) {
-        u = find_parent(u);
-        v = find_parent(v);
+    int64_t total_pieces = (a + 1) * (b + 1);
+    if (cake_map.size() < total_pieces)
+        min_berries = 0;
 
-        if (v == u)
-            return;
-
-        if (rank[u] < rank[v])
-            std::swap(u, v);
-
-        parent[v] = u;
-        if (rank[u] == rank[v])
-            ++rank[u];
-    }
-};
-
-void solve() {}
+    std::cout << min_berries << " " << max_berries << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

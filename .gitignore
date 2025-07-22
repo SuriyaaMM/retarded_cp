@@ -2,3 +2,7 @@
 .vscode/
 build/
 test.cpp
+
+# Added by cargo
+
+/target

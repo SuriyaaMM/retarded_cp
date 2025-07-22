@@ -78,14 +78,49 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+3 5 15 -> 1 move
+3 5 2 
+    3 - 2, 5 - 2 -> 1, 3 +1 move
+    1 - 1, 3 - 2 -> 0, 1 +1 move
+    0 - 0, 1 - 1 -> 0, 0 +1 move
+    5 is the max, floor(5/2) which is 2, + 1 is the answer
+
+9 7 5
+    max = 9, floor(9/5) = 1, answer = 2
+*/
+int64_t gcd(int64_t a, int64_t b) {
+    while (b != 0) {
+        int64_t temp = b;
+        b = a % b;
+        a = temp;
+    }
+    return a;
+}
+
+void solve() {
+    int64_t a, b, k;
+    std::cin >> a >> b >> k;
+
+    int64_t g = gcd(a, b);
+
+    if (std::max(a / g, b / g) > k) {
+        std::cout << 2 << '\n';
+    } else {
+        std::cout << 1 << '\n';
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-    solve();
+    int t;
+    std::cin >> t;
+    while (t--) {
+        solve();
+    }
 
     return 0;
 }
