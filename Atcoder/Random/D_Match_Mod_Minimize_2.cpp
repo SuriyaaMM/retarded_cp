@@ -1,0 +1,160 @@
+#include <algorithm>
+#include <cstdint>
+#include <iostream>
+#include <limits>
+#include <numeric>
+#include <queue>
+#include <set>
+#include <string>
+#include <unordered_map>
+#include <unordered_set>
+#include <utility>
+#include <vector>
+
+// reads the vector
+#define read_vec(begin, end, vec)         \
+    for (int64_t i = begin; i < end; ++i) \
+        std::cin >> vec[i];
+
+// reads the vector pair
+#define read_vecp(begin, end, vec)        \
+    for (int64_t i = begin; i < end; ++i) \
+        std::cin >> vec[i].first >> vec[i].second;
+
+// prints the vector
+#define print_vec(begin, end, vec)        \
+    for (int64_t i = begin; i < end; ++i) \
+        std::cout << vec[i] << " ";
+
+// infinity
+constexpr const int64_t inf = std::numeric_limits<int64_t>::max();
+// negative infinity
+constexpr const int64_t ninf = std::numeric_limits<int64_t>::min();
+
+// pair
+using pair_t = std::pair<int64_t, int64_t>;
+// generic pair
+template <typename T1, typename T2>
+using gpair_t = std::pair<T1, T2>;
+// unweighted graph
+using graph_t = std::vector<std::vector<int64_t>>;
+// weighted graph
+using wgraph_t = std::vector<std::vector<pair_t>>;
+
+// disjoint set union by  & path compression
+struct dsur_t {
+
+    std::vector<int64_t> parent, rank;
+
+    dsur_t(int64_t n) {
+        // O(n)
+        parent.resize(n + 1);
+        // O(n)
+        rank.resize(n + 1, 0);
+
+        for (int64_t i = 1; i <= n; ++i) {
+            parent[i] = i;
+        }
+    }
+    // O(1)
+    int64_t find_parent(int64_t x) {
+        if (parent[x] != x)
+            parent[x] = find_parent(parent[x]);
+        return parent[x];
+    }
+
+    void unite(int64_t u, int64_t v) {
+        u = find_parent(u);
+        v = find_parent(v);
+
+        if (v == u)
+            return;
+
+        if (rank[u] < rank[v])
+            std::swap(u, v);
+
+        parent[v] = u;
+        if (rank[u] == rank[v])
+            ++rank[u];
+    }
+};
+
+/*
+so we have to Ai + Bi to close to M-1, M-2 etc 
+Ai % M + Bi % M is max
+but Bi % M is fixed
+we should preprocess the array in such a way that Ai % M is max starting from i
+*/
+void solve() {
+    int64_t n = 0L, m = 0L;
+    std::cin >> n >> m;
+
+    std::vector<int64_t> a(n, 0), b(n, 0);
+    read_vec(0, n, a);
+    read_vec(0, n, b);
+
+    int64_t sum_a = std::accumulate(a.begin(), a.end(), 0L),
+            sum_b = std::accumulate(b.begin(), b.end(), 0L);
+
+    std::sort(a.begin(), a.end());
+    std::sort(b.begin(), b.end());
+
+    int64_t k = 0;
+    int l = 0, r = n - 1;
+    while (l < n && r >= 0) {
+        if (a[l] + b[r] >= m) {
+            k++;
+            l++;
+            r--;
+        } else {
+            l++;
+        }
+    }
+
+    int64_t min_total_mod_sum = sum_a + sum_b - (k * m);
+    std::cout << min_total_mod_sum << std::endl;
+
+    // int64_t closest_m_index = 0L, current_mod = 0L, max_mod = 0L;
+    // for (int64_t i = 0; i < n; ++i) {
+    //     current_mod = a[i] % m;
+    //     max_mod = std::max(current_mod, max_mod);
+    //     if (max_mod == current_mod) {
+    //         closest_m_index = i;
+    //     }
+    // }
+    // std::vector<int64_t> a_nice;
+    // int64_t left = closest_m_index, right = closest_m_index;
+    // while (left >= 0 && right < n) {
+    //     if (a[left] % m > a[right] % m) {
+    //         a_nice.emplace_back(a[left]);
+    //         --left;
+    //     } else if (a[left] % m < a[right] % m) {
+    //         a_nice.emplace_back(a[right]);
+    //         ++right;
+    //     } else {
+    //         a_nice.emplace_back(a[left]);
+    //         --left;
+    //     }
+    // }
+
+    // int64_t answer = 0;
+    // for (int64_t i = 0; i < n; ++i) {
+    //     answer += (a_nice[i] + b[i]) % m;
+    // }
+    // std::cout << answer << std::endl;
+}
+
+int main(int, char**) {
+    std::ios::sync_with_stdio(false);
+    std::cin.tie(nullptr);
+    std::cout.tie(nullptr);
+
+    int64_t tt = 0L;
+    std::cin >> tt;
+    while (tt--) {
+
+        solve();
+    }
+
+    return 0;
+}
