@@ -10,4 +10,4 @@ add_executable(Atcoder test.cpp)
 target_compile_features(Atcoder PUBLIC cxx_std_20)
 
 # Optimization flags (for speed)
-target_compile_options(Atcoder PRIVATE -O2 -Wall -Wextra)
+target_compile_options(Atcoder PRIVATE -Wall -Wextra)

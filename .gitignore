@@ -6,3 +6,4 @@ test.cpp
 # Added by cargo
 
 /target
+.cph/
