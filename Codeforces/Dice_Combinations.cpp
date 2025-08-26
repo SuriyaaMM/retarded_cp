@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +78,62 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+we are given a number n, we want to count the number of ways that we can get the sum
+n using numbers in the range [1, 6]
+say n = 2
+2 & 1 + 1 will be the answer
+say n = 3
+3 & 2 + 1 & 1 + 1 will be the answer 
+say n = 4
+4 & 2 + 2 & 1 + 1 + 1 + 1 & 3 + 1 & 4 + 1 will be the answer
+            2
+        2       1
+                1
+    -----------------
+            3
+    3   2       1
+        1   2       1
+                    1
+*/
+
+int64_t count_number_of_ways(int64_t n,
+                             std::unordered_map<int64_t, int64_t>& memo) {
+    if (n < 0)
+        return 0;
+    if (n == 0)
+        return 1;
+
+    if (memo.count(n))
+        return memo[n];
+
+    int64_t number_of_ways = 0L;
+    for (int64_t i = 1; i <= 6; ++i) {
+        number_of_ways += count_number_of_ways(n - i, memo);
+    }
+
+    return memo[n] = number_of_ways;
+}
+
+void solve() {
+
+    const int64_t MOD = 1e9 + 7;
+    int64_t n = 0L;
+    std::cin >> n;
+    //std::unordered_map<int64_t, int64_t> memo;
+    //std::cout << count_number_of_ways(n, memo) << std::endl;
+
+    std::vector<int64_t> dp(n + 1, 0);
+    dp[0] = 1;
+    for (int64_t i = 1; i <= n; ++i) {
+        for (int64_t j = 1; j <= 6; ++j) {
+            if (i - j >= 0)
+                dp[i] = (dp[i] + dp[i - j]) % MOD;
+        }
+    }
+
+    std::cout << dp[n] << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

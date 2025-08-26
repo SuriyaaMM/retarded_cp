@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +78,33 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, m = 0L;
+    std::cin >> n >> m;
+
+    std::string s = "", t = "";
+    std::cin >> s >> t;
+
+    std::vector<int64_t> diff(n + 1, 0);
+    for (int64_t i = 0; i < m; ++i) {
+        int64_t li = 0L, ri = 0L;
+        std::cin >> li >> ri;
+        diff[li - 1]++;
+        diff[ri]--;
+    }
+
+    int64_t current_swaps = 0;
+
+    for (int64_t i = 0; i < n; ++i) {
+        current_swaps += diff[i];
+
+        if (current_swaps % 2 != 0) {
+            std::swap(s[i], t[i]);
+        }
+    }
+
+    std::cout << s << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

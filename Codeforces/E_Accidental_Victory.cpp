@@ -2,8 +2,8 @@
 #include <cmath>
 #include <cstdint>
 #include <iostream>
+#include <iterator>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +80,50 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    std::vector<pair_t> ac(n, {0, 0});
+    for (int64_t i = 0; i < n; ++i) {
+        ac[i] = {a[i], i};
+    }
+    std::sort(ac.begin(), ac.end());
+
+    std::vector<int64_t> prefix_sum(n, 0);
+    prefix_sum[0] = ac[0].first;
+    for (int64_t i = 1; i < n; ++i) {
+        prefix_sum[i] = prefix_sum[i - 1] + ac[i].first;
+    }
+
+    int64_t suffix_index = 0;
+    for (int64_t i = n - 2; i >= 0; --i) {
+        if (prefix_sum[i] < ac[i + 1].first) {
+            suffix_index = i + 1;
+            break;
+        }
+    }
+
+    std::cout << (n - suffix_index) << std::endl;
+
+    std::vector<int64_t> answer;
+    for (int64_t i = suffix_index; i < n; ++i) {
+        answer.emplace_back(ac[i].second + 1);
+    }
+    std::sort(answer.begin(), answer.end());
+    print_vec(0, answer.size(), answer);
+    std::cout << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

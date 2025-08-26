@@ -1,9 +1,8 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
+#include <iterator>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +79,23 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, m = 0L;
+    std::cin >> n >> m;
+
+    std::vector<int64_t> a(n, 0), b(m, 0);
+    read_vec(0, n, a);
+    read_vec(0, m, b);
+
+    std::sort(a.begin(), a.end());
+
+    for (int64_t i = 0; i < m; ++i) {
+        auto it = std::upper_bound(a.begin(), a.end(), b[i]);
+        int64_t index = std::distance(a.begin(), it);
+
+        std::cout << index << " ";
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

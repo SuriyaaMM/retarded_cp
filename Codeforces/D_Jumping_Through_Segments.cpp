@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +79,45 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+bool check(const int64_t& k, std::vector<pair_t>& ranges) {
+    pair_t initial_range = {0, 0};
+    for (const auto& [li, ri] : ranges) {
+        initial_range.first = std::max(initial_range.first - k, li);
+        initial_range.second = std::min(initial_range.second + k, ri);
+
+        if (initial_range.first > initial_range.second) {
+            return false;
+        }
+    }
+    return true;
+}
+
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<pair_t> ranges(n, {0, 0});
+    read_vecp(0, n, ranges);
+
+    int64_t low = 0L, high = 1e9 + 1, mid = 0L;
+    while (low <= high) {
+        mid = (low + high) / 2;
+        if (check(mid, ranges)) {
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    std::cout << low << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +78,28 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::string a = "", duplicate = "";
+
+    // we will store [string] -> [present/not, number_of_times_it_got_repeated]
+    std::unordered_map<std::string, std::pair<bool, int64_t>> database;
+
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> a;
+        if (!database.count(a)) {
+            database[a] = {true, 0};
+            std::cout << "OK" << std::endl;
+        } else {
+            ++database[a].second;
+            duplicate = a + std::to_string(database[a].second);
+            std::cout << duplicate << std::endl;
+            database[duplicate] = {true, database[a].second};
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

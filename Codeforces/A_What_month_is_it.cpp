@@ -80,7 +80,17 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t y = 0L, x = 0L;
+    std::cin >> x >> y;
+
+    if (((x + y) % 12) == 0) {
+        std::cout << 12 << std::endl;
+        return;
+    }
+
+    std::cout << (x + y) % 12 << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

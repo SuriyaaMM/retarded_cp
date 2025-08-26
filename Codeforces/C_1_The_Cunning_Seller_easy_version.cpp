@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,18 +79,71 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+1 -> 3 coins
+3 -> 10 coins
+9 -> 33 coins
+
+10 watermelons, 
+9 + 1 -> 33 + 3 coins
+1 + 1 + 3 + 3
+*/
+void solve(std::vector<pair_t>& pre_calculation) {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    int64_t cost = 0L, low = 0L, high = pre_calculation.size() - 1;
+    while (n > 0) {
+        low = 0L;
+        high = pre_calculation.size() - 1;
+
+        int64_t this_cost = 0L, this_val = 0L;
+        while (low <= high) {
+            int64_t mid = (low + high) / 2;
+            if (pre_calculation[mid].second <= n) {
+                this_cost = pre_calculation[mid].first;
+                this_val = pre_calculation[mid].second;
+                low = mid + 1;
+            } else {
+                high = mid - 1;
+            }
+        }
+
+        if (this_val == 0) {
+            break;
+        }
+
+        cost += this_cost;
+        n -= this_val;
+    }
+
+    std::cout << cost << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;
+
+    std::vector<pair_t> pre_calculate;
+    pre_calculate.emplace_back(3, 1);
+    for (int64_t i = 1; i < 20; ++i) {
+        pre_calculate.emplace_back(
+            ((int64_t)std::pow(3, i + 1)) + i * (int64_t)(std::pow(3, i - 1)),
+            (int64_t)(std::pow(3, i)));
+    }
+
+    std::sort(
+        pre_calculate.begin(), pre_calculate.end(),
+        [](const pair_t& a, const pair_t& b) { return a.second < b.second; });
+
     while (tt--) {
-        solve();
+        solve(pre_calculate);
     }
 #else
     solve();

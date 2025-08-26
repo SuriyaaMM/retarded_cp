@@ -80,13 +80,44 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, m = 0L, fi = 0L, fj = 0L;
+    std::cin >> n >> m;
+
+    std::map<int64_t, std::set<int64_t>> unfriends;
+    for (int64_t i = 0; i < m; ++i) {
+        std::cin >> fi >> fj;
+        unfriends[fi].emplace(fj);
+        unfriends[fi].emplace(fj);
+    }
+
+    int64_t count = 0L, sslen = 0L;
+    for (int64_t i = 1; i <= n; ++i) {
+        if (unfriends.count(i)) {
+            if (!unfriends[i].empty()) {
+                sslen = *unfriends[i].begin() - i;
+                if (sslen < 0) {
+                    count += (sslen + 1);
+                } else {
+                    count += 0;
+                }
+            } else {
+                count += 1;
+            }
+        } else {
+            count += 1;
+        }
+    }
+
+    std::cout << count << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,18 +79,70 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+1 10 6 5
+
+say i am updating 1 6 5 
+2  10 7  6 will be the resulting array
+4  22 9  8 will be the resulting array
+8  22 13 12
+16 22 21 20
+32 22 37 36
+now i see the issue, we cannot increase everything as per our wish
+in this case we need not even increase 1, because 7 is the pivot and
+if we can somehow increase verything to the right of 7 in muinimum time
+then we have ourselves the answer
+
+what if 1 7 2 9 6 5, i have to somehow figure out at what point should i stop 2?
+can i reach a number between 7 and 9?
+using the given set of operations (addition by 2^x-1)
+
+*/
+void solve(std::vector<int64_t>& pre_calculation) {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    int64_t max_time = 0L, this_time = 0L;
+    for (int64_t i = 1; i < n; ++i) {
+        this_time = 0L;
+        // non decreasing
+        if (a[i - 1] > a[i]) {
+            for (int64_t j = 0; j < (int64_t)pre_calculation.size(); ++j) {
+                if (a[i - 1] <= a[i]) {
+                    break;
+                }
+                a[i] += pre_calculation[j];
+                ++this_time;
+            }
+            max_time = std::max(this_time, max_time);
+        }
+    }
+
+    std::cout << max_time << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;
+    const int64_t index = 32;
+    std::vector<int64_t> power_of_twos(index + 1, 1);
+    for (int64_t i = 0; i <= index; ++i) {
+        power_of_twos[i] = 1LL << i;
+    }
+
+    //print_vec(0, index, power_of_twos);
+
     while (tt--) {
-        solve();
+        solve(power_of_twos);
     }
 #else
     solve();

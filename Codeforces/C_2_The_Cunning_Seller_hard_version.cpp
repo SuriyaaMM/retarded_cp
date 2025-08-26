@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,18 +79,58 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+1 1
+3 3
+8 3
+2 4
+10 10
+20 14
+3 2
+9 1
+
+1 -> 3
+3 -> 10
+9 -> 33
+27 -> 108
+343 -> 351
+
+*/
+void solve(std::vector<pair_t>& pc) {
+    int64_t k = 0L;
+    std::cin >> k;
+
+    int64_t quiotent = 0L, reminder = 0L, first = 0L;
+    for (int64_t i = 0; i < pc.size(); ++i) {
+        first = pc[i].first;
+        reminder = k % first;
+        quiotent = (k - reminder) / first;
+        k -= quiotent;
+    }
+
+    //print_vec(0, 21, dp);
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+    std::vector<pair_t> pc;
+    // O(1)
+    pc.emplace_back(3, 1);
+    for (int64_t i = 1; i < 20; ++i) {
+        pc.emplace_back(i, ((int64_t)std::pow(3, i + 1)) +
+                               i * (int64_t)(std::pow(3, i - 1)));
+    }
+    //print_vec(0, pre_calculate.size(), pre_calculate);
+
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;
     while (tt--) {
-        solve();
+        solve(pc);
     }
 #else
     solve();

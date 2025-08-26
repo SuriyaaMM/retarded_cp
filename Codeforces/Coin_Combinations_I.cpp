@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +78,39 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+const int64_t MOD = 1e9 + 7;
+
+int64_t count_number_of_combinations(int64_t n, std::vector<int64_t>& coins,
+                                     std::vector<int64_t>& memo) {
+    if (n < 0)
+        return 0;
+    if (n == 0)
+        return 1;
+
+    if (memo[n] != ninf)
+        return memo[n];
+
+    int64_t number_of_combinations = 0L;
+    for (const auto& coin : coins) {
+        number_of_combinations =
+            (number_of_combinations +
+             count_number_of_combinations(n - coin, coins, memo)) %
+            MOD;
+    }
+    return memo[n] = number_of_combinations;
+}
+
+void solve() {
+    int64_t n = 0L, m = 0L;
+    std::cin >> n >> m;
+
+    std::vector<int64_t> coins(n, 0);
+    read_vec(0, n, coins);
+
+    std::vector<int64_t> memo(1e7, ninf);
+
+    std::cout << count_number_of_combinations(m, coins, memo) << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

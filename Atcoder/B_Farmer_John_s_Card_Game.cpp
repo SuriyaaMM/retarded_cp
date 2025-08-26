@@ -1,9 +1,8 @@
+#include <sys/types.h>
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,22 +79,81 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+we are given n cows & m cards for each cow
+
+2 3
+0 4 2
+1 5 3
+
+we also know what card each cow gets
+we have to detemine the order in which the cows will play so that none of the cows loses the game
+
+say we sort 
+0 2 4
+1 3 5
+
+we can trace through this to figure out whether it is possible or not
+0 -> 1 -> 2 -> 3 -> 4 -> 5 
+
+2 2
+1 2
+0 3
+4 1
+
+after sorting 
+1 2
+0 3
+1 4
+
+it is immmediatly obvious that cow 1 or 3 has to lose the game.
+*/
+void solve() {
+    int64_t n = 0L, m = 0L;
+    std::cin >> n >> m;
+
+    // {cards the cow has, cow_index}
+    std::vector<std::pair<std::vector<int64_t>, int64_t>> cards(
+        n, {std::vector<int64_t>(), 0});
+
+    for (int64_t i = 0; i < n; ++i) {
+        auto temp = std::vector<int64_t>(m, 0);
+        for (int64_t j = 0; j < m; ++j) {
+            std::cin >> temp[j];
+        }
+        cards[i] = {temp, i};
+    }
+
+    // O(nxmxlognxlogm)
+    std::sort(cards.begin(), cards.end());
+
+    std::unordered_set<int64_t> hashset;
+    for (int64_t i = 0; i < n; ++i) {
+        if (hashset.count(cards[i].first[0])) {
+            std::cout << -1 << std::endl;
+        }
+        hashset.insert(cards[i].first[0]);
+        std::cout << "cards[" << i << "].first[0] = " << " ";
+        std::cout << cards[i].first[0] << std::endl;
+    }
+
+    for (int64_t i = 0; i < n; ++i) {
+        std::cout << cards[i].second + 1 << " ";
+    }
+    std::cout << "\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-#ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;
+
     while (tt--) {
         solve();
     }
-#else
-    solve();
-#endif
 
     return 0;
 }

@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +79,40 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    const int64_t MOD = 1e9 + 7;
+    std::string s = "";
+    std::cin >> s;
+
+    int64_t n = s.size();
+
+    std::vector<int64_t> fib(n + 2, 0);
+    fib[0] = 1;
+    fib[1] = 1;
+    for (int64_t i = 2; i < n + 2; ++i) {
+        fib[i] = (fib[i - 2] + fib[i - 1]) % MOD;
+    }
+
+    int64_t left = 0L, right = 0L, interval_len = 0L, count = 1L;
+    while (right < n) {
+        if (s[right] == 'w' || s[right] == 'm') {
+            std::cout << 0 << std::endl;
+            return;
+        } else if (s[right] == 'n' || s[right] == 'u') {
+            left = right;
+            while (right < n && s[right] == s[left]) {
+                ++right;
+            }
+            interval_len = (right - left);
+            count = (count * fib[interval_len]) % MOD;
+            left = right;
+        } else {
+            ++right;
+        }
+    }
+
+    std::cout << count << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

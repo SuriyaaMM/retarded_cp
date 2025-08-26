@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,18 +79,48 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve(const std::vector<int64_t>& pre_calculation) {
+    int64_t n = 0;
+    std::cin >> n;
+
+    std::vector<int64_t> answers;
+    for (int64_t d : pre_calculation) {
+        if (n % d == 0) {
+            answers.push_back(n / d);
+        }
+    }
+
+    if (answers.empty()) {
+        std::cout << 0 << "\n";
+        return;
+    }
+
+    std::sort(answers.begin(), answers.end());
+    std::cout << answers.size() << "\n";
+    for (auto ans : answers) {
+        std::cout << ans << " ";
+    }
+    std::cout << "\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;
+
+    std::vector<int64_t> pre_calculate;
+
+    for (int64_t i = 1; i <= 19; ++i) {
+        pre_calculate.emplace_back((1 + (int64_t)std::pow(10, i)));
+    }
+
     while (tt--) {
-        solve();
+        solve(pre_calculate);
     }
 #else
     solve();

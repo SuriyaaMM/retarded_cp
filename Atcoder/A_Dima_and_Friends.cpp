@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,22 +78,46 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+if number of friends is odd, & sum of fingers shown by his friends are even
+2
+3 5
+
+sum = 8, number of friends is even = 2
+if dima shows one finger, 
+8 + 1 = 9 % 3 = 0 we will end up in friend 2
+8 + 2 = 10 % 3 = 1, we will end up in friend dima
+8 + 3 = 11 % 3 = 2, we will end up in friend 1
+8 + 4 = 12 % 3 = 0, we will end up in friend 2
+8 + 5 = 13 % 3 = 1, we will end up in friend dima
+
+dima -> f1 -> f2 -> dima -> f1 -> f2 -> dima -> f1 -> f2
+*/
+void solve() {
+    int64_t n = 0L, ai = 0L;
+    int64_t sum = 0L;
+    std::cin >> n;
+
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> ai;
+        sum += ai;
+    }
+
+    int64_t num_ways = 0L;
+    for (int64_t i = 1; i <= 5; ++i) {
+        if ((sum + i) % (n + 1) != 1) {
+            ++num_ways;
+        }
+    }
+    std::cout << num_ways << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-#ifdef MT
-    int64_t tt = 0L;
-    std::cin >> tt;
-    while (tt--) {
-        solve();
-    }
-#else
     solve();
-#endif
 
     return 0;
 }

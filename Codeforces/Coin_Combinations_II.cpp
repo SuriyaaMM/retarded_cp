@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +78,26 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+const int64_t MOD = 1e9 + 7;
+
+void solve() {
+    int64_t n = 0L, m = 0L;
+    std::cin >> n >> m;
+
+    std::vector<int64_t> coins(n, 0);
+    read_vec(0, n, coins);
+
+    std::vector<int64_t> dp(m + 1, 0);
+
+    dp[0] = 1;
+
+    for (int coin : coins) {
+        for (int j = coin; j <= m; ++j) {
+            dp[j] = (dp[j] + dp[j - coin]) % MOD;
+        }
+    }
+    std::cout << dp[m] << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

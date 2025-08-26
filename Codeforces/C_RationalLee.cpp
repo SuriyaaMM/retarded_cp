@@ -1,12 +1,13 @@
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
+#include <thread>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -80,13 +81,47 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, k = 0L;
+    std::cin >> n >> k;
+
+    std::vector<int64_t> a(n, 0), w(k, 0);
+    read_vec(0, n, a);
+    read_vec(0, k, w);
+
+    std::sort(a.begin(), a.end());
+    std::sort(w.begin(), w.end());
+
+    int64_t reverse_index = 1;
+    for (int64_t i = 0; i < k; ++i) {
+        if (w[i] != 1) {
+            reverse_index = i;
+            break;
+        }
+    }
+
+    std::sort(w.begin() + reverse_index, w.end(), std::greater<>());
+
+    int64_t left = 0, right = n - 1, happiness = 0L;
+    for (int64_t i = 0; i < k; ++i) {
+        if (w[i] == 1) {
+            happiness += 2 * a[right];
+            --right;
+        } else {
+            happiness += (a[right] + a[left]);
+            --right;
+            left += w[i] - 1;
+        }
+    }
+
+    std::cout << happiness << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

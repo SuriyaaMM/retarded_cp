@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +78,34 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+n = 5
+[1 2 3 4 5] - [1 2 3 4 5]
+[1 x x x x] - [x 1 x x x]
+[x 1 3 x x] - [x x 1 3 x]
+[x x 1 3 5] - [5 x x 1 3]
+[5 2 x 1 3] - [3 5 2 x 1]
+[1 3 5 2 4] - [4 1 3 5 2]
+*/
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+    if (n % 2 == 0) {
+        std::cout << -1 << std::endl;
+        return;
+    }
+    for (int i = n; i > 0; i--) {
+        std::cout << i << ' ';
+    }
+    std::cout << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

@@ -1,9 +1,8 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +79,27 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t q = 0L;
+    std::cin >> q;
+
+    std::priority_queue<int64_t, std::vector<int64_t>, std::greater<>> pq;
+
+    for (int64_t i = 0; i < q; ++i) {
+        int64_t type = 0L;
+        std::cin >> type;
+
+        if (type == 1) {
+            int64_t x = 0L;
+            std::cin >> x;
+
+            pq.push(x);
+        } else {
+            std::cout << pq.top() << std::endl;
+            pq.pop();
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

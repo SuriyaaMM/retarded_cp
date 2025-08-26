@@ -1,9 +1,8 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,22 +79,47 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    if (n == 1) {
+        std::cout << a[0] << std::endl;
+        return;
+    }
+
+    std::priority_queue<int64_t> max_heap;
+    // construct min-heap O(n)
+    std::priority_queue<int64_t, std::vector<int64_t>, std::greater<>> min_heap(
+        a.begin(), a.end());
+
+    int64_t prev_val = 0;
+    while (!min_heap.empty()) {
+        int64_t cur_val = min_heap.top();
+        min_heap.pop();
+
+        int64_t diff = cur_val - prev_val;
+        max_heap.push(diff);
+
+        prev_val = cur_val;
+    }
+
+    std::cout << max_heap.top() << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
-#ifdef MT
-    int64_t tt = 0L;
+    int64_t tt = 0LL;
     std::cin >> tt;
     while (tt--) {
         solve();
     }
-#else
-    solve();
-#endif
 
     return 0;
 }

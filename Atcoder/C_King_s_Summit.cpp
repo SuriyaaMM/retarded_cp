@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +78,44 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<pair_t> people(n, {0, 0});
+    read_vecp(0, n, people);
+
+    auto check = [&](int64_t t) -> bool {
+        int64_t min_r_intersect = ninf;
+        int64_t max_r_intersect = inf;
+        int64_t min_c_intersect = ninf;
+        int64_t max_c_intersect = inf;
+
+        for (int i = 0; i < n; ++i) {
+            min_r_intersect = std::max(min_r_intersect, people[i].first - t);
+            max_r_intersect = std::min(max_r_intersect, people[i].first + t);
+            min_c_intersect = std::max(min_c_intersect, people[i].second - t);
+            max_c_intersect = std::min(max_c_intersect, people[i].second + t);
+        }
+
+        return (min_r_intersect <= max_r_intersect) &&
+               (min_c_intersect <= max_c_intersect);
+    };
+
+    int64_t high = 1e9 + 300, low = 0, answer = high;
+
+    while (low <= high) {
+        int64_t mid = (low + high) / 2;
+        if (check(mid)) {
+            answer = mid;
+            high = mid - 1;
+        } else {
+            low = mid + 1;
+        }
+    }
+
+    std::cout << answer << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

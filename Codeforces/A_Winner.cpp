@@ -1,12 +1,11 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
+#include <tuple>
 #include <unordered_map>
 #include <unordered_set>
 #include <utility>
@@ -80,7 +79,44 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+/*
+<name> points
+whomever reached the points first will be the winner in case of the tie
+mike -> (3, t = 0)
+andwer -> (3, t = 0)
+mike -> (3, t = 1)
+mike & andrew -> same number of points, andrew time = 0, mike time = 1, 
+andrew is the winner
+*/
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<std::pair<std::string, int64_t>> rounds(n, {"", 0});
+
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> rounds[i].first >> rounds[i].second;
+    }
+
+    std::unordered_map<std::string, int64_t> final_scores;
+    for (const auto& [name, score] : rounds) {
+        final_scores[name] += score;
+    }
+
+    int64_t max_score = 0L;
+    for (const auto& [_, final_score] : final_scores) {
+        max_score = std::max(final_score, max_score);
+    }
+
+    std::unordered_map<std::string, int64_t> running;
+    for (const auto& [name, score] : rounds) {
+        running[name] += score;
+        if (running[name] >= max_score && final_scores[name] == max_score) {
+            std::cout << name << std::endl;
+            return;
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

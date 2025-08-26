@@ -1,9 +1,8 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
+#include <deque>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +79,35 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t na = 0L, nb = 0L;
+    std::string a = "", b = "", c = "";
+
+    std::cin >> na;
+    std::cin >> a;
+
+    std::cin >> nb;
+    std::cin >> b >> c;
+
+    std::deque<char> ad(a.begin(), a.end());
+    for (int64_t i = 0; i < nb; ++i) {
+        if (c[i] == 'V') {
+            ad.emplace_front(b[i]);
+        } else {
+            ad.emplace_back(b[i]);
+        }
+    }
+
+    std::string answer(ad.begin(), ad.end());
+    std::cout << answer << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

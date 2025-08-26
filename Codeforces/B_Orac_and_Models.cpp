@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +78,43 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+int64_t max_num_models_orac_can_choose(int64_t prev_index,
+                                       int64_t prev_model_size,
+                                       std::vector<int64_t>& models,
+                                       std::vector<int64_t>& memo) {
+
+    if (memo[prev_index] != inf && prev_model_size == models[prev_index - 1]) {
+        return memo[prev_index];
+    }
+
+    int64_t max_num_models = 0L, recursion = 0L;
+    for (int64_t j = prev_index; j <= (int64_t)models.size(); ++j) {
+        if ((j % prev_index == 0) && models[j - 1] > prev_model_size) {
+            recursion =
+                max_num_models_orac_can_choose(j, models[j - 1], models, memo) +
+                1;
+            max_num_models = std::max(max_num_models, recursion);
+        }
+    }
+    return memo[prev_index] = max_num_models;
+}
+
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    std::vector<int64_t> memo(n + 1, inf);
+    std::cout << max_num_models_orac_can_choose(1, 0, a, memo) << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

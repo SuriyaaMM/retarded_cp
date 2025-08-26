@@ -4,6 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +81,38 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<int64_t> g(n, 0);
+    read_vec(0, n, g);
+
+    std::sort(g.begin(), g.end());
+
+    // even case
+    if (n % 2 == 0) {
+        int64_t answer = 0L;
+        for (int64_t i = n - 1; i >= 0; i -= 2) {
+            answer += g[i];
+        }
+        std::cout << answer << std::endl;
+    } else {
+        int64_t answer = 0L;
+        for (int64_t i = n - 1; i > 0; i -= 2) {
+            answer += g[i];
+        }
+        answer += g[1];
+        std::cout << answer << std::endl;
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

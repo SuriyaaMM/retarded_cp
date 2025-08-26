@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,6 +78,20 @@ struct dsur_t {
     }
 };
 
+/*
+a b c
+d e f
+g h i
+d e f
+a b c
+
+c b a 
+f e d
+i h g
+f e d
+a b c
+
+*/
 void solve() {}
 
 int main(int, char**) {

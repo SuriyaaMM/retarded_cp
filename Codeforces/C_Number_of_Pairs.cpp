@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +78,66 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, l = 0L, r = 0L;
+    std::cin >> n >> l >> r;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    std::sort(a.begin(), a.end());
+
+    /*
+    1 2 5
+    1 + 5 = 6, 4 <= 6 <= 7, count = 1
+    
+    1 2 3 4 5
+    1 + 5 = 6, 5 <= 6 <= 8, count = 1
+    2 + 5 = 7, 5 <= 7 <= 8, count = 2
+    3 + 5 = 8, 5 <= 7 <= 8, count = 3
+
+    */
+
+    // while (left < right) {
+    //     if (a[left] + a[right] <= r && a[left] + a[right] >= l) {
+    //         ++counts;
+    //         ++left;
+    //         continue;
+    //     }
+
+    //     // sum is less than l, we need to increase the sum, so advance left to right
+    //     if (a[left] + a[right] < l) {
+    //         ++left;
+    //         continue;
+    //     }
+    //     // sum is more than r, we need to decrease the sum, so advance right to left
+    //     if (a[left] + a[right] > r) {
+    //         --right;
+    //         continue;
+    //     }
+    // }
+
+    int64_t counts = 0L;
+    for (int64_t i = 0; i < n; ++i) {
+
+        int64_t low = l - a[i];
+        int64_t high = r - a[i];
+
+        auto it1 = std::lower_bound(a.begin() + i + 1, a.end(), low);
+        auto it2 = std::upper_bound(a.begin() + i + 1, a.end(), high);
+
+        counts += (it2 - it1);
+    }
+
+    std::cout << counts << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

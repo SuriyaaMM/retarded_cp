@@ -1,9 +1,7 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +78,46 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, m = 0L, l = 0L;
+    std::cin >> n >> m >> l;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    std::vector<std::vector<int64_t>> groups(l);
+    for (int64_t i = 0; i < n; ++i) {
+        groups[i % l].push_back(a[i]);
+    }
+
+    std::vector<std::vector<int64_t>> cost(l, std::vector<int64_t>(m));
+    for (int i = 0; i < l; ++i) {
+        for (int k = 0; k < m; ++k) {
+            int64_t current_cost = 0;
+            for (int64_t element : groups[i]) {
+                current_cost += (k - element + m) % m;
+            }
+            cost[i][k] = current_cost;
+        }
+    }
+
+    std::vector<std::vector<int64_t>> dp(l + 1, std::vector<int64_t>(m, inf));
+    dp[0][0] = 0;
+
+    for (int i = 1; i <= l; ++i) {
+        for (int j = 0; j < m; ++j) {
+            for (int k = 0; k < m; ++k) {
+                int prev_sum = (j - k + m) % m;
+                if (dp[i - 1][prev_sum] != inf) {
+                    dp[i][j] = std::min(dp[i][j],
+                                        dp[i - 1][prev_sum] + cost[i - 1][k]);
+                }
+            }
+        }
+    }
+
+    std::cout << dp[l][0] << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

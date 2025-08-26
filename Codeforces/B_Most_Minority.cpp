@@ -80,7 +80,55 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, m = 0L;
+    std::cin >> n >> m;
+    std::vector<std::vector<char>> votes(n, std::vector<char>(m, '0'));
+
+    for (int64_t i = 0; i < n; ++i) {
+        for (int64_t j = 0; j < m; ++j) {
+            std::cin >> votes[i][j];
+        }
+    }
+
+    std::vector<int64_t> voteboard(n, 0);
+    int64_t x = 0L, y = 0L;
+    for (int64_t i = 0; i < m; ++i) {
+        x = 0L, y = 0L;
+        for (int64_t j = 0; j < n; ++j) {
+            if (votes[j][i] == '1')
+                ++y;
+            else
+                ++x;
+        }
+
+        if (x == 0 || y == 0) {
+            for (int64_t k = 0; k < n; ++k) {
+                ++voteboard[k];
+            }
+        } else if (x < y) {
+            for (int64_t k = 0; k < n; ++k) {
+                if (votes[k][i] == '0') {
+                    ++voteboard[k];
+                }
+            }
+        } else if (x > y) {
+            for (int64_t k = 0; k < n; ++k) {
+                if (votes[k][i] == '1') {
+                    ++voteboard[k];
+                }
+            }
+        }
+    }
+
+    int64_t max_score = *std::max_element(voteboard.begin(), voteboard.end());
+    for (int64_t i = 0; i < n; ++i) {
+        if (voteboard[i] == max_score) {
+            std::cout << i + 1 << " ";
+        }
+    }
+    std::cout << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

@@ -3,7 +3,6 @@
 #include <cstdint>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +79,30 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int n = 0;
+    std::cin >> n;
+
+    std::vector<int> a(n, 0);
+    read_vec(0, n, a);
+
+    std::unordered_map<int, int> m;
+    for (int i = 0; i < n; ++i) {
+        ++m[i];
+    }
+
+    int num_special_elements = 0, reduced_number = 0;
+    for (int i = 0; i < n; ++i) {
+        while ()
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

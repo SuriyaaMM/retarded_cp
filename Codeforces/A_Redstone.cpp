@@ -80,13 +80,30 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::set<int64_t> a;
+    int64_t ai = 0L;
+    for (int64_t i = 0; i < n; ++i) {
+        std::cin >> ai;
+        a.emplace(ai);
+    }
+
+    if (a.size() != n) {
+        std::cout << "YES" << std::endl;
+    } else {
+        std::cout << "NO" << std::endl;
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

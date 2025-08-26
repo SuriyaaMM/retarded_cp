@@ -1,9 +1,8 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
+#include <functional>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,13 +79,43 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L;
+    std::cin >> n;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    std::priority_queue<int64_t> max_heap;
+    std::priority_queue<int64_t, std::vector<int64_t>, std::greater<>> min_heap;
+
+    std::unordered_set<int64_t> transformable;
+
+    for (int64_t i = 0; i < n; ++i) {
+        min_heap.push(a[i]);
+        transformable.emplace(min_heap.top());
+    }
+    for (int64_t i = n - 1; i >= 0; --i) {
+        max_heap.push(a[i]);
+        transformable.emplace(max_heap.top());
+    }
+
+    std::string answer(n, '0');
+    for (int64_t i = 0; i < n; ++i) {
+        auto it = transformable.find(a[i]);
+        if (it != transformable.end()) {
+            answer[i] = '1';
+        }
+    }
+    std::cout << answer << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
 
+#define MT
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

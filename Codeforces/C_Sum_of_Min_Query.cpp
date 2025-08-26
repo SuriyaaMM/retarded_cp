@@ -80,7 +80,37 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0L, q = 0L;
+    std::cin >> n >> q;
+
+    std::vector<int64_t> a(n, 0), b(n, 0);
+    read_vec(0, n, a);
+    read_vec(0, n, b);
+
+    int64_t sum_of_min = 0L;
+    for (int64_t i = 0; i < n; ++i) {
+        sum_of_min += std::min(a[i], b[i]);
+    }
+
+    char type = '0';
+    int64_t xi = 0L, vi = 0L;
+    for (int64_t i = 0; i < q; ++i) {
+        std::cin >> type >> xi >> vi;
+        --xi;
+        if (type == 'A') {
+            sum_of_min -= std::min(a[xi], b[xi]);
+            a[xi] = vi;
+            sum_of_min += std::min(a[xi], b[xi]);
+            std::cout << sum_of_min << std::endl;
+        } else {
+            sum_of_min -= std::min(a[xi], b[xi]);
+            b[xi] = vi;
+            sum_of_min += std::min(a[xi], b[xi]);
+            std::cout << sum_of_min << std::endl;
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

@@ -1,9 +1,8 @@
 #include <algorithm>
-#include <cmath>
 #include <cstdint>
+#include <cstring>
 #include <iostream>
 #include <limits>
-#include <map>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +79,18 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    std::string s;
+    std::cin >> s;
+    if (s == "red")
+        std::cout << "SSS\n";
+    else if (s == "blue")
+        std::cout << "FFF\n";
+    else if (s == "green")
+        std::cout << "MMM\n";
+    else
+        std::cout << "Unknown\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
