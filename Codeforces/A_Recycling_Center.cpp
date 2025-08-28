@@ -2,6 +2,7 @@
 #include <cmath>
 #include <cstdint>
 #include <iostream>
+#include <iterator>
 #include <limits>
 #include <map>
 #include <queue>
@@ -81,32 +82,44 @@ struct dsur_t {
 };
 
 void solve() {
-    int64_t n = 0L;
-    std::cin >> n;
+    int64_t n = 0L, c = 0L;
+    std::cin >> n >> c;
 
-    std::vector<int64_t> mobs(n, 0);
-    read_vec(0, n, mobs);
+    std::vector<int64_t> a;
 
-    std::vector<int64_t> dp(n + 1, 0);
-    dp[1] = mobs[0];
+    int64_t answer = 0L;
+    for (int64_t i = 0; i < n; ++i) {
+        int64_t xi = 0L;
+        std::cin >> xi;
 
-    for (int64_t i = 1; i < n; ++i) {
-        // we can kill the mob below this, and this will take maximum fall damage
-        int64_t path_1 = dp[i] + mobs[i] - 1;
-        // we can kill the all the mobs below this and this will take one fall damage
-        int64_t path_2 =
-            dp[i - 1] + mobs[i - 1] + std::max((int64_t)0, mobs[i] - i);
-        dp[i + 1] = std::min(path_1, path_2);
+        if (xi > c) {
+            ++answer;
+        } else {
+            a.emplace_back(xi);
+        }
     }
 
-    std::cout << dp[n] << std::endl;
+    while (!a.empty()) {
+        std::sort(a.begin(), a.end());
+        auto it = std::upper_bound(a.begin(), a.end(), c);
+        auto distance = std::distance(it, a.end());
+        a.erase(it, a.end());
+        answer += distance;
+        if (!a.empty()) {
+            a.pop_back();
+            for (int64_t i = 0; i < a.size(); ++i) {
+                a[i] *= 2;
+            }
+        }
+    }
+
+    std::cout << answer << std::endl;
 }
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-
 #define MT
 #ifdef MT
     int64_t tt = 0L;

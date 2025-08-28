@@ -81,32 +81,27 @@ struct dsur_t {
 };
 
 void solve() {
-    int64_t n = 0L;
-    std::cin >> n;
+    int64_t n = 0L, k = 0L;
+    std::cin >> n >> k;
 
-    std::vector<int64_t> mobs(n, 0);
-    read_vec(0, n, mobs);
-
-    std::vector<int64_t> dp(n + 1, 0);
-    dp[1] = mobs[0];
-
-    for (int64_t i = 1; i < n; ++i) {
-        // we can kill the mob below this, and this will take maximum fall damage
-        int64_t path_1 = dp[i] + mobs[i] - 1;
-        // we can kill the all the mobs below this and this will take one fall damage
-        int64_t path_2 =
-            dp[i - 1] + mobs[i - 1] + std::max((int64_t)0, mobs[i] - i);
-        dp[i + 1] = std::min(path_1, path_2);
+    std::vector<int64_t> a(n);
+    for (int i = 0; i < n; ++i) {
+        std::cin >> a[i];
     }
 
-    std::cout << dp[n] << std::endl;
+    int64_t g = k + 1;
+    for (int i = 0; i < n; ++i) {
+        int64_t c_i = a[i] % g;
+        int64_t final_val = a[i] + c_i * k;
+        std::cout << final_val << (i == n - 1 ? "" : " ");
+    }
+    std::cout << "\n";
 }
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-
 #define MT
 #ifdef MT
     int64_t tt = 0L;

@@ -81,32 +81,47 @@ struct dsur_t {
 };
 
 void solve() {
-    int64_t n = 0L;
-    std::cin >> n;
+    int64_t m = 0L;
+    std::cin >> m;
 
-    std::vector<int64_t> mobs(n, 0);
-    read_vec(0, n, mobs);
+    std::vector<int64_t> last(50001, -1);
+    std::vector<std::vector<int64_t>> days(m);
 
-    std::vector<int64_t> dp(n + 1, 0);
-    dp[1] = mobs[0];
-
-    for (int64_t i = 1; i < n; ++i) {
-        // we can kill the mob below this, and this will take maximum fall damage
-        int64_t path_1 = dp[i] + mobs[i] - 1;
-        // we can kill the all the mobs below this and this will take one fall damage
-        int64_t path_2 =
-            dp[i - 1] + mobs[i - 1] + std::max((int64_t)0, mobs[i] - i);
-        dp[i + 1] = std::min(path_1, path_2);
+    for (int64_t day = 0; day < m; ++day) {
+        int64_t ni;
+        std::cin >> ni;
+        days[day].resize(ni);
+        for (int64_t j = 0; j < ni; ++j) {
+            int64_t x;
+            std::cin >> x;
+            days[day][j] = x;
+            last[x] = day;
+        }
     }
 
-    std::cout << dp[n] << std::endl;
+    std::vector<int64_t> ans(m, -1);
+    for (int64_t day = 0; day < m; ++day) {
+        for (int64_t x : days[day]) {
+            if (last[x] == day) {
+                ans[day] = x;
+            }
+        }
+        if (ans[day] == -1) {
+            std::cout << -1 << "\n";
+            return;
+        }
+    }
+
+    for (int64_t i = 0; i < m; ++i) {
+        std::cout << ans[i] << " ";
+    }
+    std::cout << "\n";
 }
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-
 #define MT
 #ifdef MT
     int64_t tt = 0L;

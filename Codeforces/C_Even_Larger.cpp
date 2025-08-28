@@ -81,32 +81,53 @@ struct dsur_t {
 };
 
 void solve() {
-    int64_t n = 0L;
+    int n;
     std::cin >> n;
 
-    std::vector<int64_t> mobs(n, 0);
-    read_vec(0, n, mobs);
-
-    std::vector<int64_t> dp(n + 1, 0);
-    dp[1] = mobs[0];
-
-    for (int64_t i = 1; i < n; ++i) {
-        // we can kill the mob below this, and this will take maximum fall damage
-        int64_t path_1 = dp[i] + mobs[i] - 1;
-        // we can kill the all the mobs below this and this will take one fall damage
-        int64_t path_2 =
-            dp[i - 1] + mobs[i - 1] + std::max((int64_t)0, mobs[i] - i);
-        dp[i + 1] = std::min(path_1, path_2);
+    if (n == 1) {
+        std::cout << -1 << "\n";
+        continue;
     }
 
-    std::cout << dp[n] << std::endl;
+    std::vector<std::vector<int>> adj(n + 1);
+
+    for (int i = 0; i < n - 1; i++) {
+        int u, v;
+        std::cin >> u >> v;
+        adj[u].push_back(v);
+        adj[v].push_back(u);
+    }
+
+    // Find vertex with maximum degree >= 3
+    int max_degree = 0;
+    int max_vertex = -1;
+
+    for (int i = 1; i <= n; i++) {
+        if (adj[i].size() > max_degree) {
+            max_degree = adj[i].size();
+            max_vertex = i;
+        }
+    }
+
+    // If max degree < 3, it's already a path graph
+    if (max_degree < 3) {
+        std::cout << -1 << "\n";
+        return;
+    }
+
+    // Choose the vertex with max degree as b
+    int b = max_vertex;
+    // Choose any two neighbors as a and c
+    int a = adj[b][0];
+    int c = adj[b][1];
+
+    std::cout << a << " " << b << " " << c << "\n";
 }
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-
 #define MT
 #ifdef MT
     int64_t tt = 0L;
