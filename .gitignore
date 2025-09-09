@@ -1,9 +1,9 @@
 .cache/
 .vscode/
 build/
-test.cpp
-
-# Added by cargo
-
-/target
+CMakeFiles/
 .cph/
+CMakeCache.txt
+compile_commands.json
+Makefile
+test.cpp
