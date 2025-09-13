@@ -4,6 +4,7 @@
 #include <iostream>
 #include <limits>
 #include <map>
+#include <numeric>
 #include <queue>
 #include <set>
 #include <string>
@@ -80,7 +81,31 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL, x = 0LL;
+    std::cin >> n >> x;
+
+    std::vector<int64_t> a(n, 0LL);
+    read_vec(0, n, a);
+
+    std::vector<int64_t> psa(n + 1, 0LL);
+    psa[0] = 0;
+    for (int64_t i = 1; i <= n; ++i) {
+        psa[i] = (psa[i - 1] + a[i - 1]);
+    }
+
+    std::vector<int64_t> dp(n + 1, 0LL);
+    for (int64_t i = n - 1; i >= 0; --i) {
+        int64_t k = std::distance(
+            psa.begin(), std::upper_bound(psa.begin(), psa.end(), psa[i] + x));
+        if (k <= n)
+            dp[i] = dp[k] + 1;
+    }
+
+    std::cout << ((n * (n + 1)) / 2) -
+                     std::accumulate(dp.begin(), dp.end(), 0LL)
+              << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

@@ -80,7 +80,58 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL;
+    std::cin >> n;
+
+    std::string s = "";
+    std::cin >> s;
+
+    std::vector<int64_t> fmap(26, ninf);
+    for (int64_t i = 0; i < n; ++i) {
+        if (fmap[s[i] - 'a'] == ninf) {
+            fmap[s[i] - 'a'] = 0LL;
+        }
+        ++fmap[s[i] - 'a'];
+    }
+
+    std::ranges::sort(fmap);
+
+    auto start = std::upper_bound(fmap.begin(), fmap.end(), ninf);
+    auto end = std::lower_bound(fmap.begin(), fmap.end(), fmap.back());
+    int64_t si = std::distance(fmap.begin(), start);
+    int64_t se = std::distance(fmap.begin(), end);
+
+    int64_t l = si, r = se, ans = 0LL, lci = 0LL;
+    while (l < r) {
+        int64_t diff = fmap[se] - fmap[r];
+        if (diff == 0) {
+            --r;
+            continue;
+        }
+        int64_t acc = fmap[l];
+        ans += acc;
+        while (diff < acc) {
+            ++l;
+            acc += fmap[l];
+            fmap[l] = 0;
+        }
+
+        fmap[l] = acc - diff;
+        ans -= fmap[l];
+        lci = r;
+        --r;
+        if (fmap[l] == 0) {
+            ++l;
+        }
+    }
+
+    for (int64_t i = si; i < lci; ++i) {
+        ans += fmap[i];
+    }
+
+    std::cout << ans << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

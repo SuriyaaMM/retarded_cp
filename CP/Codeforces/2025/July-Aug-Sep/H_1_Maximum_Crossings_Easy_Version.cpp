@@ -80,7 +80,31 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL;
+    std::cin >> n;
+
+    std::vector<int64_t> a(n + 1, 0);
+    read_vec(1, n + 1, a);
+
+    std::vector<std::vector<int64_t>> conn(n + 1,
+                                           std::vector<int64_t>(n + 1, 0));
+    int64_t answer = 0LL;
+    for (int64_t i = 1; i <= n; ++i) {
+        int64_t from = i;
+        int64_t to = a[i];
+
+        for (int64_t j = 1; j < from; ++j) {
+            for (int64_t k = to; k <= n; ++k) {
+                answer += conn[j][k];
+            }
+        }
+
+        conn[from][to]++;
+    }
+
+    std::cout << answer << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

@@ -80,7 +80,34 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL;
+    std::cin >> n;
+
+    int64_t get = 0LL, let = 0LL;
+    std::unordered_set<int64_t> net;
+    for (int64_t i = 0LL; i < n; ++i) {
+        int64_t a = 0LL;
+        std::cin >> a;
+        if (a == 1LL) {
+            int64_t x = 0LL;
+            std::cin >> x;
+            if (x >= get) {
+                get = x;
+            }
+        } else if (a == 2LL) {
+            int64_t x = 0LL;
+            std::cin >> x;
+            if (x <= let) {
+                let = x;
+            }
+        } else {
+            int64_t x = 0LL;
+            std::cin >> x;
+            net.emplace(x);
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
