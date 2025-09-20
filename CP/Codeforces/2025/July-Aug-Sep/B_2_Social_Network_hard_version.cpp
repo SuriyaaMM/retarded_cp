@@ -75,13 +75,41 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL, k = 0LL;
+    std::cin >> n >> k;
+
+    std::deque<int64_t> q;
+    std::unordered_set<int64_t> e;
+    for (int64_t i = 0; i < n; ++i) {
+        int64_t id = 0LL;
+        std::cin >> id;
+
+        const auto& it = e.find(id);
+        if (it == e.end()) {
+            if (q.size() >= k) {
+                int64_t r = q.back();
+                q.pop_back();
+                e.erase(e.find(r));
+            }
+            e.emplace(id);
+            q.emplace_front(id);
+        }
+    }
+
+    std::cout << q.size() << std::endl;
+    while (!q.empty()) {
+        std::cout << q.front() << " ";
+        q.pop_front();
+    }
+    std::cout << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-#define MT
+
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

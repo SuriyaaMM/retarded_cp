@@ -75,7 +75,33 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t m = 0LL;
+    std::cin >> m;
+
+    std::vector<int64_t> a(m, 0);
+    read_vec(0, m, a);
+
+    int64_t cc = 0LL;
+    for (int64_t cs = 2; cs <= m; cs *= 2) {
+        for (int64_t i = 0; i < m; i += cs) {
+            if (a[i] > a[i + cs / 2]) {
+                ++cc;
+                for (int64_t k = 0; k < cs / 2; ++k) {
+                    std::swap(a[i + k], a[i + cs / 2 + k]);
+                }
+            }
+        }
+    }
+
+    for (int64_t i = 1; i < m; ++i) {
+        if (a[i] < a[i - 1]) {
+            std::cout << -1 << std::endl;
+            return;
+        }
+    }
+    std::cout << cc << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

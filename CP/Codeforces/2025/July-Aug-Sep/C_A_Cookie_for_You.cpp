@@ -75,7 +75,23 @@ struct dsur_t {
     }
 };
 
-void solve() {}
+void solve() {
+    int64_t a = 0LL, b = 0LL, n = 0LL, m = 0LL;
+    std::cin >> a >> b >> n >> m;
+
+    int64_t sc = (a + b);
+    int64_t sg = (n + m);
+    if (sc < sg) {
+        std::cout << "No" << std::endl;
+        return;
+    }
+
+    if (m > std::min(a, b)) {
+        std::cout << "No" << std::endl;
+        return;
+    }
+    std::cout << "Yes" << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

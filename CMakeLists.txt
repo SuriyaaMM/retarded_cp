@@ -9,8 +9,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(Atcoder test.cpp)
 
-# Use C++23
 target_compile_features(Atcoder PUBLIC cxx_std_20)
-
-# Optimization flags (for speed)
 target_compile_options(Atcoder PRIVATE -Wall -Wextra)
