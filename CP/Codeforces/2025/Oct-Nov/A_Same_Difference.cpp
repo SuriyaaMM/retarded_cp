@@ -42,7 +42,23 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL;
+    std::cin >> n;
+
+    std::string s = "";
+    std::cin >> s;
+
+    int64_t cc = 0LL;
+    for (int64_t i = s.size() - 2; i >= 0; --i) {
+        if (s[i] != s[i + 1]) {
+            ++cc;
+            s[i] = s[i + 1];
+        }
+    }
+
+    std::cout << cc << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

@@ -42,7 +42,26 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+void solve() {
+    int64_t Ro = 0LL, X = 0LL, D = 0LL, n = 0LL;
+    std::cin >> Ro >> X >> D >> n;
+    std::string s = "";
+    std::cin >> s;
+
+    int64_t mr = 0LL;
+    for (int64_t i = 0; i < n; ++i) {
+        if (Ro < X) {
+            mr += (n - i);
+            break;
+        }
+        if (s[i] == '1') {
+            ++mr;
+            Ro = std::max((int64_t)(0), Ro - D);
+        }
+    }
+
+    std::cout << mr << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

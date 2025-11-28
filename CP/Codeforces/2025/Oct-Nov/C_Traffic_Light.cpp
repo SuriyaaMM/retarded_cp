@@ -1,3 +1,4 @@
+
 #include <algorithm>
 #include <cmath>
 #include <cstdint>
@@ -42,7 +43,37 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL;
+    char b = '\0';
+
+    std::cin >> n >> b;
+
+    std::string s = "";
+    std::cin >> s;
+
+    std::vector<int64_t> gi = {};
+
+    for (int64_t i = 0; i < n; ++i) {
+        if (s[i] == 'g') {
+            gi.emplace_back(i);
+        }
+    }
+
+    int64_t mt = ninf;
+    for (int64_t i = 0; i < n; ++i) {
+        if (s[i] == b) {
+            auto it = std::lower_bound(gi.begin(), gi.end(), i);
+            if (it != gi.end()) {
+                mt = std::max(mt, *it - i);
+            } else {
+                mt = std::max(mt, (n - i) + gi[0]);
+            }
+        }
+    }
+
+    std::cout << mt << std::endl;
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

@@ -42,13 +42,40 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+void solve() {
+    std::string s = "";
+    std::cin >> s;
+
+    int64_t l = 0, r = s.size() - 1;
+
+    int64_t c = 0LL;
+    while (l < r) {
+        if (s[l] == s[r]) {
+        } else {
+            ++c;
+        }
+        ++l;
+        --r;
+    }
+
+    if (c > 1) {
+        std::cout << "NO\n";
+    } else if (c == 1) {
+        std::cout << "YES\n";
+    } else {
+        if (s.size() % 2 == 1) {
+            std::cout << "YES\n";
+        } else {
+            std::cout << "NO\n";
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);
     std::cout.tie(nullptr);
-#define MT
+
 #ifdef MT
     int64_t tt = 0L;
     std::cin >> tt;

@@ -42,8 +42,68 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+// disjoint set union by  & path compression
+struct dsur_t {
+    std::vector<int64_t> parent, rank;
 
+    dsur_t(int64_t n) {
+        // O(n)
+        parent.resize(n + 1);
+        // O(n)
+        rank.resize(n + 1, 0);
+
+        for (int64_t i = 1; i <= n; ++i) {
+            parent[i] = i;
+        }
+    }
+    // O(1)
+    int64_t find_parent(int64_t x) {
+        if (parent[x] != x) parent[x] = find_parent(parent[x]);
+        return parent[x];
+    }
+
+    void unite(int64_t u, int64_t v) {
+        u = find_parent(u);
+        v = find_parent(v);
+
+        if (v == u) return;
+
+        if (rank[u] < rank[v]) std::swap(u, v);
+
+        parent[v] = u;
+        if (rank[u] == rank[v]) ++rank[u];
+    }
+};
+
+void solve() {
+    int64_t n = 0LL;
+    std::cin >> n;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    std::vector<bool> v(n, false);
+    std::vector<int64_t> cycle(n, inf);
+
+    for (int64_t i = 0; i < n; ++i) {
+        if (!v[i]) {
+            int64_t cyl = 0LL;
+            int64_t cnode = i;
+            std::vector<int64_t> vnodes;
+            while (!v[cnode]) {
+                v[cnode] = true;
+                vnodes.emplace_back(cnode);
+                cnode = a[cnode] - 1;
+                ++cyl;
+            }
+            for (const auto& vi : vnodes) {
+                cycle[vi] = cyl;
+            }
+        }
+        std::cout << cycle[i] << " ";
+    }
+    std::cout << std::endl;
+}
 int main(int, char**) {
     std::ios::sync_with_stdio(false);
     std::cin.tie(nullptr);

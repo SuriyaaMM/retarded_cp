@@ -42,7 +42,38 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+void solve() {
+    int64_t n, X;
+    std::cin >> n >> X;
+
+    std::vector<int64_t> a(n);
+    read_vec(0, n, a);
+
+    // Sort items in ascending order
+    std::sort(a.begin(), a.end());
+
+    // Calculate bonus points
+    int64_t total_bonus = 0;
+    int64_t current_sum = 0;
+    int64_t prev_loyalty = 0;
+
+    for (int64_t i = 0; i < n; ++i) {
+        current_sum += a[i];
+        int64_t current_loyalty = current_sum / X;
+
+        // If loyalty increased, we earn bonus equal to the item price
+        if (current_loyalty > prev_loyalty) {
+            total_bonus += a[i];
+        }
+
+        prev_loyalty = current_loyalty;
+    }
+
+    // Output results
+    std::cout << total_bonus << "\n";
+    print_vec(0, n, a);
+    std::cout << "\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

@@ -42,7 +42,19 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL;
+    std::cin >> n;
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    for (int64_t i = 0; i < n; ++i) {
+        if (i > 0 && i < n - 1) {
+            bool lcons = (i - a[i]) >= 0;
+            bool rcons = (i + a[i]) < n;
+        }
+    }
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

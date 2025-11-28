@@ -42,7 +42,50 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+void solve() {
+    int64_t n = 0LL;
+    std::cin >> n;
+
+    std::vector<int64_t> a(n, 0);
+    read_vec(0, n, a);
+
+    std::vector<int64_t> l(n), r(n);
+    for (int64_t i = 0; i < n; ++i) {
+        l[i] = (i == 0) ? n - 1 : i - 1;
+        r[i] = (i == n - 1) ? 0 : i + 1;
+    }
+    std::vector<bool> alv(n, true);
+
+    std::priority_queue<pair_t, std::vector<pair_t>, std::greater<pair_t>> pq;
+    for (int64_t i = 0; i < n; ++i) {
+        int64_t cost = std::max(a[i], a[r[i]]);
+        pq.push({cost, i});
+    }
+
+    int64_t cc = 0LL, md = 0LL;
+    while (md < n - 1) {
+        auto [ci, i] = pq.top();
+        pq.pop();
+
+        if (!alv[i]) continue;
+
+        int64_t j = r[i];
+        if (ci != std::max(a[i], a[j])) continue;
+
+        cc += ci;
+        ++md;
+        a[i] = ci;
+
+        int64_t loi = l[i], roj = r[j];
+        r[i] = roj;
+        l[roj] = i;
+        alv[j] = false;
+        pq.push({std::max(a[i], a[roj]), i});
+        pq.push({std::max(a[loi], a[i]), loi});
+    }
+
+    std::cout << cc << "\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

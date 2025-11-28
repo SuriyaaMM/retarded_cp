@@ -42,7 +42,66 @@ using graph_t = std::vector<std::vector<int64_t>>;
 // weighted graph
 using wgraph_t = std::vector<std::vector<pair_t>>;
 
-void solve() {}
+// disjoint set union by  & path compression
+struct dsur_t {
+    std::vector<int64_t> parent, rank;
+
+    dsur_t(int64_t n) {
+        // O(n)
+        parent.resize(n + 1);
+        // O(n)
+        rank.resize(n + 1, 0);
+
+        for (int64_t i = 1; i <= n; ++i) {
+            parent[i] = i;
+        }
+    }
+    // O(1)
+    int64_t find_parent(int64_t x) {
+        if (parent[x] != x) parent[x] = find_parent(parent[x]);
+        return parent[x];
+    }
+
+    void unite(int64_t u, int64_t v) {
+        u = find_parent(u);
+        v = find_parent(v);
+
+        if (v == u) return;
+
+        if (rank[u] < rank[v]) std::swap(u, v);
+
+        parent[v] = u;
+        if (rank[u] == rank[v]) ++rank[u];
+    }
+};
+
+void solve() {
+    int64_t n = 0LL, p = 0LL, k = 0LL;
+    std::cin >> n >> p >> k;
+
+    std::string a = "";
+    std::cin >> a;
+
+    std::string aa = "9" + a;
+
+    int64_t x = 0LL, y = 0LL;
+    std::cin >> x >> y;
+
+    std::vector<int64_t> dp(n + k + 1, 0);
+    for (int64_t i = n; i >= 1; --i) {
+        int64_t c = 0LL;
+        if (aa[i] == '0') c++;
+
+        dp[i] = dp[i + k] + c;
+    }
+
+    int64_t cc = inf;
+    for (int64_t j = 0; j < n - p; ++j) {
+        int64_t c = j * y + x * dp[p + j];
+        cc = std::min(c, cc);
+    }
+    std::cout << cc << "\n";
+}
 
 int main(int, char**) {
     std::ios::sync_with_stdio(false);

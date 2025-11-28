@@ -9,5 +9,5 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 add_executable(Atcoder test.cpp)
 
-target_compile_features(Atcoder PUBLIC cxx_std_20)
+target_compile_features(Atcoder PUBLIC cxx_std_23)
 target_compile_options(Atcoder PRIVATE -Wall -Wextra)
