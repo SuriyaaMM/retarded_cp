@@ -7,3 +7,7 @@ CMakeCache.txt
 compile_commands.json
 Makefile
 test.cpp
+output.txt
+error.txt
+input.txt
+nf
