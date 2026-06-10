@@ -18,8 +18,10 @@ void solve() {
         tuples[i - 2] = std::make_tuple(a[i - 2], a[i - 1], a[i]);
     }
 
+    // std::vector will give an tle :(
     std::unordered_map<int32_t, std::map<t2, int32_t>> d1, d2, d3;
     for (const auto &ai : a) { d1[ai] = {}; }
+
     std::map<t2, int64_t> c1, c2, c3;
 
     for (const auto &[a1, a2, a3] : tuples) {
