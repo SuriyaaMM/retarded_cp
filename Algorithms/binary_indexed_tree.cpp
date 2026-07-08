@@ -1,6 +1,5 @@
 #include <vector>
 
-namespace std2 {
 /*
 implementation of binary_indexed_tree (aka fenwick tree)
 @note
@@ -47,4 +46,3 @@ template <typename __T, typename __T_Accumulator> struct binary_indexed_tree {
         return prefix(r) - prefix(l - 1);
     }
 };
-} // namespace std2

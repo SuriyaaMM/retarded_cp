@@ -6,7 +6,7 @@ template <typename _T, class _BinaryOp> struct sparse_table_t {
     _BinaryOp op;
 
     sparse_table_t(std::vector<_T> &__restrict__ array) {
-        std::size_t n = array.size();
+        const std::size_t n = array.size();
 
         log2.resize(n + 1);
         log2[1] = 0;
@@ -24,8 +24,9 @@ template <typename _T, class _BinaryOp> struct sparse_table_t {
         }
     }
 
+    [[nodiscard]]
     _T query(std::size_t l, std::size_t r) {
-        std::size_t k = log2[r - l + 1];
+        constexpr const std::size_t k = log2[r - l + 1];
         return op(st[k][l], st[k][r - (1 << k) + 1]);
     }
 };

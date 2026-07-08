@@ -1,1 +1,0 @@
-g++ CMakeFiles/Atcoder.dir/Atcoder/ABC415/D.cpp.o -o Atcoder 

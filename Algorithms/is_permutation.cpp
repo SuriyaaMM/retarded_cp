@@ -1,6 +1,6 @@
 #include <bits/stdc++.h>
 
-static constexpr const std::int32_t _n = 3e5 + 1;
+static constexpr std::int32_t _n = 3e5 + 1;
 std::array<std::int32_t, _n> count_a, count_b;
 
 template <typename _T1, typename _T2>

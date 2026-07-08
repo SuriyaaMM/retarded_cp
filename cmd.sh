@@ -1,5 +1,7 @@
 # codeforces version
-clang++ -std=c++23 -O2 -fsanitize=address,undefined -fno-omit-frame-pointer -pipe nf.cpp -o main && ./main < input.txt > output.txt
+clang++ -std=c++23 -O2 -g -fsanitize=address,undefined -fno-omit-frame-pointer -pipe nf.cpp -o main && ./main < input.txt > output.txt
+# generator 
+clang++ -std=c++23 -O2 -fsanitize=address,undefined -fno-omit-frame-pointer -pipe gen.cpp -o gen && ./gen > input.txt
 
 # o3 version
 clang++ -std=c++23 -O3 -pipe nf.cpp -o main && ./main < input.txt > output.txt
